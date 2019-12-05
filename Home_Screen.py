@@ -1,4 +1,6 @@
-from Heroes import Heroes
+from knight import knight
+from wizard import wizard
+from thief import thief
 import os.path
 
 
@@ -19,6 +21,16 @@ class Menu:
         print("\nChoose your character!")
 
         # Here you can put the class heroes
+
+        knight_hero = knight
+        knight_hero.ability_discription()
+
+        wizard_hero = wizard
+        wizard_hero.ability_discription()
+
+        thief_hero = thief
+        thief_hero.ability_discription()
+        
 
         print("\n")
         self.user_char_choice = input(">").strip()
