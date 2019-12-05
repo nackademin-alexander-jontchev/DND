@@ -5,5 +5,10 @@ class knight:
         self.attack = 6
         self.agility = 5
         
-    def ability_discription():
-        #first attack is blocket by defoult, during the battle phase the Knight dosent need to block or evade 
+    def ability_discription(self):
+        print("You have chosen the noble knight")
+        print(f"Initiativ =  {self.initiativ}")
+        print(f"Durability = {self.durability}")
+        print(f"Attack = {self.attack}")
+        print(f"Agility = {self.agility}")
+        print(f("The knigts speciall ability is shieldblock:\n att the start of a battle, the knight has a 100% chans of blocking the first attack"))
