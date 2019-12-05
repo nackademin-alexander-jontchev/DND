@@ -4,6 +4,6 @@ class knight:
         self.durability = 9
         self.attack = 6
         self.agility = 5
-        
-    def ability_discription():
-        #first attack is blocket by defoult, during the battle phase the Knight dosent need to block or evade 
+
+    def ability_discription(self):
+        print("First attack is blocket by defoult, during the battle phase the Knight dosent need to block or evade")
