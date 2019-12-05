@@ -1,14 +1,15 @@
-class knight:
+class wizard:
+
     def __init__(self):
-        self.initiativ = 5
-        self.durability = 9
-        self.attack = 6
+        self.initiative = 6
+        self.durability = 4
+        self.attack = 9
         self.agility = 5
-        
+
     def ability_discription(self):
         print("You have chosen the noble knight")
         print(f"Initiativ =  {self.initiativ}")
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The knigts speciall ability is shieldblock:\n att the start of a battle, the knight has a 100% chans of blocking the first attack")
+        print(f"The Wizards speciall ability is Light flash:\n The wizard can blind the monsters and has an 80% chance to escape fights")

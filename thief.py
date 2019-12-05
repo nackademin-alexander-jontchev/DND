@@ -1,14 +1,15 @@
-class knight:
+class thief():
+
     def __init__(self):
-        self.initiativ = 5
-        self.durability = 9
-        self.attack = 6
-        self.agility = 5
-        
+        self.initiative = 7
+        self.durability = 5
+        self.attack = 5
+        self.agility = 7
+
     def ability_discription(self):
         print("You have chosen the noble knight")
         print(f"Initiativ =  {self.initiativ}")
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The knigts speciall ability is shieldblock:\n att the start of a battle, the knight has a 100% chans of blocking the first attack")
+        print(f"The Critical strike\n the thief has a 25% to do double damage everytime the thief attacks")
