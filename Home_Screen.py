@@ -38,6 +38,24 @@ class Menu:
             self.message = "You are a Thief!"
             print(self.message)
 
+    def pick_map(self):
+
+        self.user_map_choice = input("\nPlease, choose your map size!\n>").strip()
+        print("1- Size 4x4\n2- Size 5x5\n3- Size")
+
+        if self.user_map_choice == "1":
+            pass
+
+        elif self.user_map_choice == "2":
+            pass
+
+        elif self.user_map_choice == "3":
+            pass
+
+
+
+
+
     def user_name_creation(self):
 
         self.charater_name = input("\nPlease, Enter your username character :\n>").strip()
@@ -106,6 +124,7 @@ class Menu:
         elif self.menu_choice == "3":
 
             print("\nSee you later!")
+
 
 # Instance of the class Menu
 menu = Menu()
