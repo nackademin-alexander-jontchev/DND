@@ -1,10 +1,10 @@
 class thief():
 
     def __init__(self):
-        self.initiative = 6
-        self.durability = 4
-        self.attack = 9
-        self.agility = 5
+        self.initiative = 7
+        self.durability = 5
+        self.attack = 5
+        self.agility = 7
 
     def ability_discription(self):
         print("You have chosen the noble knight")
