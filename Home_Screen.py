@@ -1,6 +1,8 @@
 from knight import knight
 from wizard import wizard
 from thief import thief
+from maps import maps
+
 import os.path
 
 
@@ -22,15 +24,15 @@ class Menu:
 
         # Here you can put the class heroes
 
-        knight_hero = knight
+        knight_hero = knight()
         knight_hero.ability_discription()
 
-        wizard_hero = wizard
+        wizard_hero = wizard()
         wizard_hero.ability_discription()
 
-        thief_hero = thief
+        thief_hero = thief()
         thief_hero.ability_discription()
-        
+
 
         print("\n")
         self.user_char_choice = input(">").strip()
@@ -52,21 +54,22 @@ class Menu:
 
     def pick_map(self):
 
-        self.user_map_choice = input("\nPlease, choose your map size!\n>").strip()
-        print("1- Size 4x4\n2- Size 5x5\n3- Size")
+        print("\nPlease, choose your map size!")
+        print("\n1- Size 4x4\n2- Size 5x5\n3- Size 8x8\n")
+
+        self.user_map_choice = input("\n>").strip()
 
         if self.user_map_choice == "1":
-            pass
+            map_choice = maps()
+            map_choice.show_small_map()
 
         elif self.user_map_choice == "2":
-            pass
+            map_choice = maps()
+            map_choice.show_medium_map()
 
         elif self.user_map_choice == "3":
-            pass
-
-
-
-
+            map_choice = maps()
+            map_choice.show_large_map()
 
     def user_name_creation(self):
 
@@ -124,6 +127,8 @@ class Menu:
         if self.menu_choice == "1":
 
             menu.pick_character()
+
+            menu.pick_map()
 
             menu.user_name_creation()
 

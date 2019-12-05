@@ -8,8 +8,9 @@ class wizard:
 
     def ability_discription(self):
         print("\n2-Wizard\n")
-        print(f"Initiativ =  {self.initiativ}")
+
+        print(f"Initiative =  {self.initiative}")
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The Wizards speciall ability is Light flash:\n The wizard can blind the monsters and has an 80% chance to escape fights")
+        print(f"The Wizards speciall ability is Light flash:\nThe wizard can blind the monsters and has an 80% chance to escape fights")

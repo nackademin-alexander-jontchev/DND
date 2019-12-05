@@ -8,8 +8,9 @@ class thief():
 
     def ability_discription(self):
         print("\n3-Thief\n")
-        print(f"Initiativ =  {self.initiativ}")
+
+        print(f"Initiative =  {self.initiative}")
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The Critical strike\n the thief has a 25% to do double damage everytime the thief attacks")
+        print(f"The Critical strike\nThe thief has a 25% to do double damage everytime the thief attacks")
