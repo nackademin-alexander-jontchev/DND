@@ -61,15 +61,18 @@ class Menu:
 
         if self.user_map_choice == "1":
             map_choice = maps()
-            map_choice.show_small_map()
+            map_choice.create_small_map()
+            map_choice.show_map()
 
         elif self.user_map_choice == "2":
             map_choice = maps()
-            map_choice.show_medium_map()
+            map_choice.create_medium_map()
+            map_choice.show_map()
 
         elif self.user_map_choice == "3":
             map_choice = maps()
-            map_choice.show_large_map()
+            map_choice.create_large_map()
+            map_choice.show_map()
 
     def user_name_creation(self):
 
