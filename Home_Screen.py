@@ -58,21 +58,34 @@ class Menu:
         print("\n1- Size 4x4\n2- Size 5x5\n3- Size 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
+        map_choice = maps()
 
         if self.user_map_choice == "1":
-            map_choice = maps()
             map_choice.create_small_map()
             map_choice.show_map()
 
         elif self.user_map_choice == "2":
-            map_choice = maps()
             map_choice.create_medium_map()
             map_choice.show_map()
 
         elif self.user_map_choice == "3":
-            map_choice = maps()
             map_choice.create_large_map()
             map_choice.show_map()
+    
+
+        pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left')
+        cmd = ''
+        if pos == '1':
+            cmd = 'ur'
+        elif pos == '2':
+            cmd == 'lr'
+        elif pos == '3':
+            cmd = 'ul'
+        elif pos == '4':
+            cmd = 'll'
+
+        map_choice.place_player(cmd)
+        map_choice.show_map()            
 
     def user_name_creation(self):
 
@@ -129,11 +142,11 @@ class Menu:
 
         if self.menu_choice == "1":
 
+            menu.user_name_creation()
+
             menu.pick_character()
 
             menu.pick_map()
-
-            menu.user_name_creation()
 
             menu.save_character()
 

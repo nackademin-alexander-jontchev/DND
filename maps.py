@@ -1,7 +1,6 @@
 class maps:
 
     def __init__(self):
-        self.active_map = ''
         self.small_map = []
         self.medium_map = []
         self.large_map = []
