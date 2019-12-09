@@ -7,7 +7,7 @@ class Wizard:
         self.agility = 5
 
     def ability_discription(self):
-
+        
         print("\n2-Wizard")
         print(f" ---------------")
         print(f"| Initiative = {self.initiative}|")
@@ -19,3 +19,4 @@ class Wizard:
         print(f"| Light. The magician can make monsters blind,             |\n"
               f"|and therefore always has 80% chance of escape from combat.|")
         print(f" ----------------------------------------------------------")
+
