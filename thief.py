@@ -1,4 +1,4 @@
-class Thief:
+class thief():
 
     def __init__(self):
         self.initiative = 7
@@ -7,14 +7,10 @@ class Thief:
         self.agility = 7
 
     def ability_discription(self):
-        print("\n3-Thief")
-        print(f" ---------------")
-        print(f"| Initiative = {self.initiative}|")
-        print(f"| Durability = {self.durability}|")
-        print(f"| Attack     = {self.attack}|")
-        print(f"| Agility    = {self.agility}|")
-        print(f" ---------------")
-        print(f"\nSpecial ability :-----------------------------------------------")
-        print(f"|Critical hit. The thief has a 25% chance of doing double damage|\n"
-              f"|every time the thief attacks.                                  |")
-        print(f" ---------------------------------------------------------------")
+        print("\n3-Thief\n")
+
+        print(f"Initiative =  {self.initiative}")
+        print(f"Durability = {self.durability}")
+        print(f"Attack = {self.attack}")
+        print(f"Agility = {self.agility}")
+        print(f"The Critical strike\nThe thief has a 25% to do double damage everytime the thief attacks")
