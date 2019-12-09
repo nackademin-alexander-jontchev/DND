@@ -11,6 +11,8 @@ class Menu:
     def __init__(self):
 
         print('-----Welcome to "Dungeon Run"-----')
+        print('---A fast phased dungoncrawler----')
+        print('----------For ballers-------------')
 
         print("1-New Game")
         print("2-Load Game")
