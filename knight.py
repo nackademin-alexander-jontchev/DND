@@ -6,7 +6,7 @@ class Knight:
         self.attack = 6
         self.agility = 5
         
-    def ability_discription(self)
+    def ability_discription(self):
     
         print("\n1-Knight")
         print(f" ---------------")
