@@ -119,6 +119,8 @@ class Menu:
 
         self.user_map_choice = input("\n>").strip()
 
+        os.system("cls")
+
         if self.user_map_choice == "1":
             map_choice.create_small_map()
             map_choice.show_map()
@@ -132,7 +134,7 @@ class Menu:
             map_choice.show_map()
 
 
-        pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left')
+        pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left\n>')
         cmd = ''
         if pos == '1':
             cmd = 'ur'
@@ -151,7 +153,15 @@ class Menu:
 
         self.charater_name = input("\nPlease, Enter your username character :\n>").strip()
 
+        print("Creating your character ...")
+
+        time.sleep(2)
+
         print(f'Your character name {self.charater_name} has been created!')
+
+        time.sleep(3)
+
+        os.system("cls")
 
     def save_character(self):
 
@@ -188,9 +198,13 @@ class Menu:
 
         if os.path.exists(self.load_username):
 
-            with open(self.load_username ,"r") as file:
+            with open(self.load_username, "r") as file:
 
                 files = file.readline()
+
+                print("Loading Game ...")
+
+                time.sleep(2)
 
                 print(files)
 
@@ -222,9 +236,9 @@ class Menu:
 
             menu.pick_character()
 
-            menu.pick_map()
-
             menu.save_character()
+
+            menu.pick_map()
 
         elif self.menu_choice == "2":
 
