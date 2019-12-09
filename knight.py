@@ -14,7 +14,7 @@ class knight:
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The knight speciall ability is shieldblock:\nAt the start of a battle, the knight has a 100% chans of blocking the first attack")
+        print(f"The knight speciall ability is shieldblock:\nAt the start of a battle, the knight has a 100% chance of blocking the first attack")
 
 
 
