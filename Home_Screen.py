@@ -1,9 +1,10 @@
+
 from knight import knight
 from wizard import wizard
 from thief import thief
 from maps import maps
-
 import os.path
+import random
 
 
 class Menu:
@@ -18,6 +19,52 @@ class Menu:
 
         self.menu_choice = input("\n>").strip()
 
+    def gen_treasure(self):
+        spawned = []
+        treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
+        for k,v in treasures.items():
+            chance = randint(0,100)
+            if chance <= v:
+                spawned.append(k)
+        return spawned
+                
+    def gen_monster(self):
+        pass
+    def fight_monster(self):
+        pass
+    
+
+    def start_game(self):
+
+        while True:
+            print('w, s, a, d')
+            cmd = input('')
+            if cmd == 'w':
+                map_choice.move_up()
+                menu.gen_monster()
+                menu.fight_monster()
+                menu.gen_treasure()
+
+            elif cmd == 's':
+                map_choice.move_down()
+                menu.gen_monster()
+                menu.fight_monster()
+                menu.gen_treasure()
+            elif cmd == 'a':
+                map_choice.move_left()
+                menu.gen_monster()
+                menu.fight_monster()
+                menu.gen_treasure()
+            elif cmd == 'd':
+                map_choice.move_right()
+                menu.gen_monster()
+                menu.fight_monster()
+                menu.gen_treasure()
+            os.system('CLS')
+            map_choice.show_map()
+    
+    
+    
     def pick_character(self):
 
         print("\nChoose your character!")
@@ -53,12 +100,14 @@ class Menu:
             print(self.message)
 
     def pick_map(self):
+        global map_choice
+
+        map_choice = maps()
 
         print("\nPlease, choose your map size!")
         print("\n1- Size 4x4\n2- Size 5x5\n3- Size 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
-        map_choice = maps()
 
         if self.user_map_choice == "1":
             map_choice.create_small_map()
@@ -78,14 +127,15 @@ class Menu:
         if pos == '1':
             cmd = 'ur'
         elif pos == '2':
-            cmd == 'lr'
+            cmd = 'lr'
         elif pos == '3':
             cmd = 'ul'
         elif pos == '4':
             cmd = 'll'
 
         map_choice.place_player(cmd)
-        map_choice.show_map()            
+        map_choice.show_map()
+        menu.start_game()
 
     def user_name_creation(self):
 

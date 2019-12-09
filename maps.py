@@ -49,7 +49,7 @@ class maps:
             self.current_position = (0,len(self.current_map)-1)
         if corner == 'lr':
             self.current_map[len(self.current_map)-1][len(self.current_map)-1] = '@'
-            self.current_position = (len(self.current_map)-1,len(self.current_map-1))
+            self.current_position = (len(self.current_map)-1,len(self.current_map)-1)
         if corner == 'll':
             self.current_map[len(self.current_map)-1][0] = '@'
             self.current_position = (len(self.current_map)-1,0)
