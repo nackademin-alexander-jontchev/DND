@@ -17,7 +17,7 @@ class Menu:
         print("1-New Game")
         print("2-Load Game")
         print("3-Remove saved Game")
-        print("3-Exit")
+        print("4-Exit")
 
         self.menu_choice = input("\n>").strip()
 
