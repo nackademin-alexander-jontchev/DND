@@ -19,7 +19,7 @@ class Menu:
         print("4-Exit")
 
         self.menu_choice = input("\n>").strip()
-        
+
     def gen_treasure(self):
         spawned = []
         treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
