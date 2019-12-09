@@ -5,7 +5,7 @@ from maps import maps
 
 import time
 import os.path
-import random
+from random import randint
 
 class Menu:
 
@@ -19,6 +19,9 @@ class Menu:
         print("4-Exit")
 
         self.menu_choice = input("\n>").strip()
+
+        os.system("cls")
+
 
     def gen_treasure(self):
         spawned = []
@@ -104,6 +107,7 @@ class Menu:
             self.message = "You are a Thief!"
             thief_hero.ability_discription()
             print(self.message)
+
 
     def pick_map(self):
         global map_choice
@@ -208,6 +212,7 @@ class Menu:
         print("Removing saved game ...")
         time.sleep(2)
         print("Game removed!")
+
 
     def new_user_game(self):
 
