@@ -1,8 +1,9 @@
-from knight import knight
-from wizard import wizard
-from thief import thief
+from knight import Knight
+from wizard import Wizard
+from thief import Thief
 from maps import maps
 
+import time
 import os.path
 
 
@@ -11,12 +12,11 @@ class Menu:
     def __init__(self):
 
         print('-----Welcome to "Dungeon Run"-----')
-        print('---A fast phased dungoncrawler----')
-        print('----------For ballers-------------')
 
         print("1-New Game")
         print("2-Load Game")
-        print("3-Exit")
+        print("3-Remove saved Game")
+        print("4-Exit")
 
         self.menu_choice = input("\n>").strip()
 
@@ -26,38 +26,43 @@ class Menu:
 
         # Here you can put the class heroes
 
-        knight_hero = knight()
+        knight_hero = Knight()
         knight_hero.ability_discription()
 
-        wizard_hero = wizard()
+        wizard_hero = Wizard()
         wizard_hero.ability_discription()
 
-        thief_hero = thief()
+        thief_hero = Thief()
         thief_hero.ability_discription()
 
 
         print("\n")
         self.user_char_choice = input(">").strip()
 
+        os.system("cls")
+
         if self.user_char_choice == "1":
 
             self.message = "You are a Knight!"
+            knight_hero.ability_discription()
             print(self.message)
 
         elif self.user_char_choice == "2":
 
             self.message = "You are a Wizard!"
+            wizard_hero.ability_discription()
             print(self.message)
 
         elif self.user_char_choice == "3":
 
             self.message = "You are a Thief!"
+            thief_hero.ability_discription()
             print(self.message)
 
     def pick_map(self):
 
         print("\nPlease, choose your map size!")
-        print("\n1- Size 4x4\n2- Size 5x5\n3- Size 8x8\n")
+        print("\n1- Small map 4x4\n2- Medium map 5x5\n3- Large map 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
         map_choice = maps()
@@ -73,21 +78,21 @@ class Menu:
         elif self.user_map_choice == "3":
             map_choice.create_large_map()
             map_choice.show_map()
-    
+
 
         pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left')
         cmd = ''
         if pos == '1':
             cmd = 'ur'
         elif pos == '2':
-            cmd == 'lr'
+            cmd = 'lr'
         elif pos == '3':
             cmd = 'ul'
         elif pos == '4':
             cmd = 'll'
 
         map_choice.place_player(cmd)
-        map_choice.show_map()            
+        map_choice.show_map()
 
     def user_name_creation(self):
 
@@ -130,7 +135,7 @@ class Menu:
 
         if os.path.exists(self.load_username):
 
-            with open(self.load_username,"r") as file:
+            with open(self.load_username ,"r") as file:
 
                 files = file.readline()
 
@@ -139,6 +144,21 @@ class Menu:
         else:
 
             print("This game doesn't exist.")
+
+    def delete_file(self):
+
+        for file in os.listdir("."):
+            if file.endswith(".txt"):
+                print(os.path.join(file).strip(".txt"))
+
+        self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
+
+        self.remove_file = (self.remove_file + ".txt")
+
+        os.remove(self.remove_file)
+        print("Removing saved game ...")
+        time.sleep(2)
+        print("Game removed!")
 
     def new_user_game(self):
 
@@ -158,17 +178,13 @@ class Menu:
 
         elif self.menu_choice == "3":
 
+            menu.delete_file()
+
+        elif self.menu_choice == "4":
+
             print("\nSee you later!")
 
 
 # Instance of the class Menu
 menu = Menu()
 menu.new_user_game()
-
-
-
-
-
-
-
-
