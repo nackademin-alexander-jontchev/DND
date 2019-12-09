@@ -1,4 +1,4 @@
-class Thief:
+class Thief():
 
     def __init__(self):
         self.initiative = 7
