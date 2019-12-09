@@ -20,6 +20,9 @@ class Menu:
 
         self.menu_choice = input("\n>").strip()
 
+        os.system("cls")
+
+
     def gen_treasure(self):
         spawned = []
         treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
@@ -104,6 +107,7 @@ class Menu:
             self.message = "You are a Thief!"
             thief_hero.ability_discription()
             print(self.message)
+
 
     def pick_map(self):
         global map_choice
@@ -208,6 +212,7 @@ class Menu:
         print("Removing saved game ...")
         time.sleep(2)
         print("Game removed!")
+
 
     def new_user_game(self):
 

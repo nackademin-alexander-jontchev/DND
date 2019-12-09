@@ -7,7 +7,7 @@ class Wizard:
         self.agility = 5
 
     def ability_discription(self):
-        
+
         print("\n2-Wizard")
         print(f" ---------------")
         print(f"| Initiative = {self.initiative}|")
