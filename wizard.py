@@ -13,4 +13,4 @@ class wizard:
         print(f"Durability = {self.durability}")
         print(f"Attack = {self.attack}")
         print(f"Agility = {self.agility}")
-        print(f"The Wizards speciall ability is Light flash:\nThe wizard can blind the monsters and has an 80% chance to escape fights")
+        print(f"The Wizards speciall ability is Illumination:\nThe wizard can blind the monsters and has an 80% chance to escape fights")
