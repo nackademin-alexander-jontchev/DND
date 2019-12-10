@@ -35,6 +35,7 @@ class maps:
     
 
     def randmizeTreassure(self):
+        #makes a copy if the map woth treassures
         board = self.current_map.copy()
         
         loosecoins = treasure('loose coins', 2, 0.4)
