@@ -1,4 +1,4 @@
-import treasure
+from treasure import Treasure
 from random import randint
 
 class maps:

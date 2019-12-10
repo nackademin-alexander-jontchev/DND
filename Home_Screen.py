@@ -7,6 +7,7 @@ import time
 import os.path
 from random import randint
 
+
 class Menu:
 
     def __init__(self):
