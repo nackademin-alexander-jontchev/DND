@@ -1,7 +1,7 @@
 from knight import Knight
 from wizard import Wizard
 from thief import Thief
-from maps import maps
+from maps import Maps
 
 import time
 import os.path
@@ -112,7 +112,7 @@ class Menu:
     def pick_map(self):
         global map_choice
 
-        map_choice = maps()
+        map_choice = Maps()
 
         print("\nPlease, choose your map size!")
         print("\n1- Small map 4x4\n2- Medium map 5x5\n3- Large map 8x8\n")
