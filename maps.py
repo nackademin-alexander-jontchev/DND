@@ -1,6 +1,7 @@
 from treasure import Treasure
 from monsters import Monsters
 from random import randint
+from copy import deepcopy
 
 
 class Maps:
@@ -11,6 +12,8 @@ class Maps:
         self.large_map = []
         self.current_map = []
         self.current_position = ()
+        self.monster_map = []
+        self.treasure_map = []
 
     def create_small_map(self):
         self.small_map = [['X'] * 4 for i in range(4)]
@@ -36,7 +39,7 @@ class Maps:
 
     def randomize_monster(self):
         # makes a copy of the map with monsters in it
-        monster_board = self.current_map.copy()
+        monster_board = deepcopy(self.current_map.copy())
 
         big_spider = Monsters(7, 1, 2, 3, 0.2)
         skeleton = Monsters(4, 2, 3, 3, 0.15)
@@ -48,24 +51,24 @@ class Maps:
                 monster_list = []
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.2:
-                    monster_list.append(big_spider)
+                    monster_list.append('big_spider')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.15:
-                    monster_list.append(skeleton)
+                    monster_list.append('skeleton')
                 rnd3 = randint(1, 100) / 100
                 if rnd3 <= 0.1:
-                    monster_list.append(orc)
+                    monster_list.append('orc')
                 rnd4 = randint(1, 100) / 100
                 if rnd4 <= 0.05:
-                    monster_list.append(troll)
+                    monster_list.append('troll')
 
                 row[row.index(room)] = monster_list
 
-        return monster_board
+        self.monster_map = deepcopy(monster_board)
 
     def randomize_treasure(self):
         # makes a copy if the map woth treassures
-        treasure_board = self.current_map.copy()
+        treasure_board = deepcopy(self.current_map.copy())
 
         loosecoins = Treasure('loose coins', 2, 0.4)
         moneypouch = Treasure('money pouch', 6, 0.2)
@@ -77,29 +80,29 @@ class Maps:
                 treassure_list = []
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.40:
-                    treassure_list.append(loosecoins)
+                    treassure_list.append('loose coins')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.20:
-                    treassure_list.append(moneypouch)
+                    treassure_list.append('money pouch')
                 rnd3 = randint(1, 100) / 100
                 if rnd3 <= 0.15:
-                    treassure_list.append(goldjewelry)
+                    treassure_list.append('goldjewelry')
                 rnd4 = randint(1, 100) / 100
                 if rnd4 <= 0.10:
-                    treassure_list.append(gemstone)
+                    treassure_list.append('gemstone')
                 rnd5 = randint(1, 100) / 100
                 if rnd5 <= 0.05:
-                    treassure_list.append(smallchest)
+                    treassure_list.append('smallchest')
 
                 row[row.index(room)] = treassure_list
-        return treasure_board
+        self.treasure_map = deepcopy(treasure_board.copy())
 
     def show_map(self):
         if len(self.current_map) == 8:
             print('size 8x8:')
         elif len(self.current_map) == 5:
             print('size 5x5:')
-        elif len(self.current_map) == 4
+        elif len(self.current_map) == 4:
             print('size 4x4:')
         for grid in self.current_map:
             print(grid)
@@ -124,14 +127,17 @@ class Maps:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0] - 1][self.current_position[1]] = '@'
             self.current_position = (self.current_position[0] - 1, self.current_position[1])
+            return self.current_position
         except:
             print('Out of bounds')
+        
 
     def move_down(self):
         try:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0] + 1][self.current_position[1]] = '@'
             self.current_position = (self.current_position[0] + 1, self.current_position[1])
+            return self.current_position
         except:
             print('Out of bounds')
 
@@ -140,6 +146,7 @@ class Maps:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0]][self.current_position[1] - 1] = '@'
             self.current_position = (self.current_position[0], self.current_position[1] - 1)
+            return self.current_position
         except:
             print('Out of bounds')
 
@@ -148,5 +155,6 @@ class Maps:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0]][self.current_position[1] + 1] = '@'
             self.current_position = (self.current_position[0], self.current_position[1] + 1)
+            return self.current_position
         except:
             print('Out of bounds')

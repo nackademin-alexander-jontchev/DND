@@ -12,6 +12,7 @@ class Menu:
 
     def __init__(self):
 
+
         print('-----Welcome to "Dungeon Run"-----')
 
         print("1-New Game")
@@ -23,38 +24,32 @@ class Menu:
 
         os.system("cls")
 
-
+    #def new_room_mech(self):
+        #print(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]])
+        
     def start_game(self):
+        self.current_pos = ()
 
         while True:
             print('w, s, a, d')
             cmd = input('')
             if cmd == 'w':
-                map_choice.move_up()
-                menu.gen_monster()
-                menu.fight_monster()
-                menu.gen_treasure()
-
+                self.current_pos = map_choice.move_up()
             elif cmd == 's':
-                map_choice.move_down()
-                menu.gen_monster()
-                menu.fight_monster()
-                menu.gen_treasure()
+                self.current_pos = map_choice.move_down()
             elif cmd == 'a':
-                map_choice.move_left()
-                menu.gen_monster()
-                menu.fight_monster()
-                menu.gen_treasure()
+                self.current_pos = map_choice.move_left()
             elif cmd == 'd':
-                map_choice.move_right()
-                menu.gen_monster()
-                menu.fight_monster()
-                menu.gen_treasure()
+                self.current_pos = map_choice.move_right()                
             os.system('CLS')
             map_choice.show_map()
-    
-    
-    
+            print(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]])
+            print(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]])
+
+            #if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0:
+            
+                
+
     def pick_character(self):
 
         print("\nChoose your character!")
