@@ -24,21 +24,6 @@ class Menu:
         os.system("cls")
 
 
-    def gen_treasure(self):
-        spawned = []
-        treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
-        for k,v in treasures.items():
-            chance = randint(0,100)
-            if chance <= v:
-                spawned.append(k)
-        return spawned
-                
-    def gen_monster(self):
-        pass
-    def fight_monster(self):
-        pass
-    
-
     def start_game(self):
 
         while True:
@@ -125,14 +110,21 @@ class Menu:
         if self.user_map_choice == "1":
             map_choice.create_small_map()
             map_choice.show_map()
+            map_choice.randomize_monster()
+            map_choice.randomize_treasure()
 
         elif self.user_map_choice == "2":
             map_choice.create_medium_map()
             map_choice.show_map()
+            map_choice.randomize_monster()
+            map_choice.randomize_treasure()
 
         elif self.user_map_choice == "3":
             map_choice.create_large_map()
             map_choice.show_map()
+            map_choice.randomize_monster()
+            map_choice.randomize_treasure()
+            
 
 
         pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left\n>')
@@ -160,7 +152,7 @@ class Menu:
 
         print(f'Your character name {self.charater_name} has been created!')
 
-        time.sleep(3)
+        #time.sleep(3)
 
         os.system("cls")
 
