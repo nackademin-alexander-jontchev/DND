@@ -1,4 +1,4 @@
-class monsters:
+class Monsters:
     
     def __init__(self, initiative, durability, attack, agility, rarity):
         self.initiative = initiative
