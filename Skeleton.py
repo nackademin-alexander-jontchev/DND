@@ -5,5 +5,6 @@ class skeleton:
         self.durability = 2
         self.attack = 3
         self.agility = 3
+        self.spawn = 0.15
         
         #spawn chance is 15%

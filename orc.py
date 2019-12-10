@@ -5,5 +5,6 @@ class orc:
         self.durability = 3
         self.attack = 4
         self.agility = 4
+        self.spawn = 0.10
         
         #spawn chance is 10%

@@ -5,5 +5,5 @@ class giant_spider:
         self.durability = 1
         self.attack = 2
         self.agility = 3
-        
+        self.spawn = 0.20
         #spawn chance is 20%
