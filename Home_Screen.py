@@ -23,7 +23,6 @@ class Menu:
 
         os.system("cls")
 
-
     def gen_treasure(self):
         spawned = []
         treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
@@ -43,7 +42,7 @@ class Menu:
 
         while True:
             print('w, s, a, d')
-            cmd = input('')
+            cmd = input('>').lower().strip()
             if cmd == 'w':
                 map_choice.move_up()
                 menu.gen_monster()
@@ -134,8 +133,12 @@ class Menu:
             map_choice.create_large_map()
             map_choice.show_map()
 
-
-        pos = input('choose in which corner to begin \n 1: upper right \n 2: lower right \n 3: upper left \n 4: lower left\n>')
+        pos = input('choose in which corner to begin :'
+                    '\n1: upper right '
+                    '\n2: lower right '
+                    '\n3: upper left'
+                    '\n 4: lower left'
+                    '\n>')
         cmd = ''
         if pos == '1':
             cmd = 'ur'
@@ -152,7 +155,7 @@ class Menu:
 
     def user_name_creation(self):
 
-        self.charater_name = input("\nPlease, Enter your username character :\n>").strip()
+        self.charater_name = input("\nPlease, Enter your username character :\n>").strip().capitalize()
 
         print("Creating your character ...")
 
@@ -182,7 +185,7 @@ class Menu:
 
     def load_game(self):
 
-        self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip()
+        self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
 
         if self.show_saved_game == "y":
 
@@ -193,7 +196,7 @@ class Menu:
         else:
             pass
 
-        self.check_username = input("\nPlease Enter your character username :\n>").strip()
+        self.check_username = input("\nPlease Enter your character username :\n>").strip().capitalize()
 
         self.load_username = (self.check_username + ".txt")
 
@@ -252,6 +255,10 @@ class Menu:
         elif self.menu_choice == "4":
 
             print("\nSee you later!")
+
+        else:
+            print("Please follow the instruction you Dum Ass!")
+
 
 
 # Instance of the class Menu
