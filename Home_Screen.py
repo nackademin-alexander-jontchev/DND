@@ -156,7 +156,7 @@ class Menu:
 
         print("Creating your character ...")
 
-        time.sleep(2)
+        #time.sleep(2)
 
         print(f'Your character name {self.charater_name} has been created!')
 
@@ -205,7 +205,7 @@ class Menu:
 
                 print("Loading Game ...")
 
-                time.sleep(2)
+                #time.sleep(2)
 
                 print(files)
 
@@ -225,7 +225,7 @@ class Menu:
 
         os.remove(self.remove_file)
         print("Removing saved game ...")
-        time.sleep(2)
+        #time.sleep(2)
         print("Game removed!")
 
 
