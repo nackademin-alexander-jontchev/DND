@@ -1,3 +1,6 @@
+import treasure
+from random import randint
+
 class maps:
 
     def __init__(self):
@@ -6,6 +9,7 @@ class maps:
         self.large_map = []
         self.current_map = []
         self.current_position = ()
+         
 
     def create_small_map(self):
         self.small_map = [['X'] * 4 for i in range(4)]
@@ -28,6 +32,40 @@ class maps:
         print('size 5x5:')
         for medium in self.medium_map:
             print(medium)
+    
+
+    def randmizeTreassure(self):
+        board = self.current_map.copy()
+        
+        loosecoins = treasure('loose coins', 2, 0.4)
+        moneypouch = treasure('money pouch', 6, 0.2)
+        goldjewelry = treasure('golden jewelry', 10, 0.15)
+        gemstone = treasure('gemstone',14,0.1)
+        smallchest = treasure('small chest', 20, 0.05)
+        for row in board:
+            for room in row:
+                treassure_list = []
+                rnd1 = randint(1, 100) / 100
+                print(rnd1)
+                if rnd1 <= 0.40:
+                    treassure_list.append(loosecoins.value)
+                rnd2 = randint(1, 100) / 100
+                if rnd2 <= 0.20:
+                    treassure_list.append(moneypouch.value)
+                rnd3 = randint(1, 100) / 100
+                if rnd3 <= 0.15:
+                    treassure_list.append(goldjewelry.value)
+                rnd4 = randint(1, 100) / 100
+                if rnd4 <= 0.10:
+                    treassure_list.append(gemstone.value)
+                rnd5 = randint(1, 100) / 100
+                if rnd5 <= 0.05:
+                    treassure_list.append(smallchest.value)
+
+                row[row.index(room)] = treassure_list
+
+        return board
+        
 
     def show_map(self):
         if len(self.current_map) == 8:
