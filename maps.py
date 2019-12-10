@@ -76,7 +76,6 @@ class Maps:
             for room in row:
                 treassure_list = []
                 rnd1 = randint(1, 100) / 100
-                print(rnd1)
                 if rnd1 <= 0.40:
                     treassure_list.append(loosecoins)
                 rnd2 = randint(1, 100) / 100
