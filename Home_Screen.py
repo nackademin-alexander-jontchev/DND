@@ -23,7 +23,6 @@ class Menu:
 
         os.system("cls")
 
-<<<<<<< HEAD
     def gen_treasure(self):
         spawned = []
         treasures = {'lösa slantar':40, 'pengapung': 20, 'guldsmycken': 15, 'ädelsten': 10, 'liten skattkista': 5}
@@ -37,9 +36,6 @@ class Menu:
         pass
     def fight_monster(self):
         pass
-    
-=======
->>>>>>> 44590612a5c19cc44fa2ae53bb6c9cd487fafc9a
 
     def start_game(self):
 
@@ -147,7 +143,7 @@ class Menu:
                     '\n1: upper right '
                     '\n2: lower right '
                     '\n3: upper left'
-                    '\n 4: lower left'
+                    '\n4: lower left'
                     '\n>')
         cmd = ''
         if pos == '1':
@@ -268,7 +264,6 @@ class Menu:
 
         else:
             print("Please follow the instruction you Dum Ass!")
-
 
 
 # Instance of the class Menu

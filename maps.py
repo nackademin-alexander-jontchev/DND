@@ -99,7 +99,7 @@ class Maps:
             print('size 8x8:')
         elif len(self.current_map) == 5:
             print('size 5x5:')
-        elif len(self.current_map) == 4
+        elif len(self.current_map) == 4:
             print('size 4x4:')
         for grid in self.current_map:
             print(grid)
