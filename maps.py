@@ -35,6 +35,7 @@ class Maps:
             print(medium)
 
     def randomize_monster(self):
+        # makes a copy of the map with monsters in it
         monster_board = self.current_map.copy()
 
         big_spider = Monsters(7, 1, 2, 3, 0.2)
@@ -46,7 +47,6 @@ class Maps:
             for room in row:
                 monster_list = []
                 rnd1 = randint(1, 100) / 100
-                print(rnd1)
                 if rnd1 <= 0.2:
                     monster_list.append(big_spider)
                 rnd2 = randint(1, 100) / 100
@@ -76,7 +76,6 @@ class Maps:
             for room in row:
                 treassure_list = []
                 rnd1 = randint(1, 100) / 100
-                print(rnd1)
                 if rnd1 <= 0.40:
                     treassure_list.append(loosecoins)
                 rnd2 = randint(1, 100) / 100
@@ -93,7 +92,6 @@ class Maps:
                     treassure_list.append(smallchest)
 
                 row[row.index(room)] = treassure_list
-
         return treasure_board
 
     def show_map(self):
@@ -101,7 +99,7 @@ class Maps:
             print('size 8x8:')
         elif len(self.current_map) == 5:
             print('size 5x5:')
-        elif len(self.current_map) == 4:
+        elif len(self.current_map) == 4
             print('size 4x4:')
         for grid in self.current_map:
             print(grid)
