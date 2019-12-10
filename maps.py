@@ -39,10 +39,10 @@ class maps:
 
         big_spider = monsters(7, 1, 2, 3, 0.2)
         skeleton = monsters(4, 2, 3, 3, 0.15)
-        orc = monsters.monsters(6, 3, 4, 4, 0.1)
-        troll = monsters.monsters(2, 4, 7, 2, 0.05)
+        orc = monsters(6, 3, 4, 4, 0.1)
+        troll = monsters(2, 4, 7, 2, 0.05)
 
-        return monster_board
+        pass
 
     def randomize_treasure(self):
         # makes a copy if the map woth treassures
