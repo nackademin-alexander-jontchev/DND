@@ -1,5 +1,3 @@
-from treasure import Treasure
-from monsters import Monsters
 from random import randint
 from copy import deepcopy
 
@@ -41,17 +39,13 @@ class Maps:
         # makes a copy of the map with monsters in it
         monster_board = deepcopy(self.current_map.copy())
 
-        big_spider = Monsters(7, 1, 2, 3, 0.2)
-        skeleton = Monsters(4, 2, 3, 3, 0.15)
-        orc = Monsters(6, 3, 4, 4, 0.1)
-        troll = Monsters(2, 4, 7, 2, 0.05)
-
+      
         for row in monster_board:
             for room in row:
                 monster_list = []
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.2:
-                    monster_list.append('big_spider')
+                    monster_list.append('big spider')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.15:
                     monster_list.append('skeleton')
@@ -70,11 +64,6 @@ class Maps:
         # makes a copy if the map woth treassures
         treasure_board = deepcopy(self.current_map.copy())
 
-        loosecoins = Treasure('loose coins', 2, 0.4)
-        moneypouch = Treasure('money pouch', 6, 0.2)
-        goldjewelry = Treasure('golden jewelry', 10, 0.15)
-        gemstone = Treasure('gemstone', 14, 0.1)
-        smallchest = Treasure('small chest', 20, 0.05)
         for row in treasure_board:
             for room in row:
                 treassure_list = []
