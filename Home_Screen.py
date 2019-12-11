@@ -5,20 +5,25 @@ from maps import Maps
 
 import time
 import os.path
+import sys
 from random import randint
 
 
 class Menu:
 
     def __init__(self):
-
-
-        print('-----Welcome to "Dungeon Run"-----')
-
-        print("1-New Game")
-        print("2-Load Game")
-        print("3-Remove saved Game")
-        print("4-Exit")
+        # Visuals to make the starting menu looks good.
+        os.system("cls")
+        print("##################################")
+        print('#    Welcome to "Dungeon Run     #')
+        print("##################################")
+        print("\n")
+        print("          1-New Game              ")
+        print("          2-Load Game             ")
+        print("          3-Remove saved Game     ")
+        print("          4-Exit                  ")
+        print("\n")
+        print("     Copyright 2019 Originals     ")
 
         self.menu_choice = input("\n>").strip()
 
@@ -26,34 +31,48 @@ class Menu:
 
     #def new_room_mech(self):
         #print(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]])
-        
-    def start_game(self):
-        self.current_pos = ()
 
-        while True:
-            print('w, s, a, d')
-            cmd = input('>').lower().strip()
-            if cmd == 'w':
-                self.current_pos = map_choice.move_up()
-            elif cmd == 's':
-                self.current_pos = map_choice.move_down()
-            elif cmd == 'a':
-                self.current_pos = map_choice.move_left()
-            elif cmd == 'd':
-                self.current_pos = map_choice.move_right()                
-            os.system('CLS')
-            map_choice.show_map()
-            print(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]])
-            print(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]])
+    # Function to create the user profile.
+    def user_name_creation(self):
 
-            #if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0:
-            
-                
+        question = "Hello champion, What's your username, if you don't have one, just pick one and let's get started ?"
 
+        for char in question :
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        self.charater_name = input("\n>").strip().capitalize()
+
+        question2 = "Creating your character ...\n"
+
+        for char in question2 :
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        time.sleep(1)
+
+        question3 = f'Your character name {self.charater_name} has been created!'
+
+        for char in question3:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        time.sleep(2)
+
+        os.system("cls")
+
+    # Function to pick the hero
     def pick_character(self):
 
-        print("\nChoose your character!")
+        question = f'Hello {self.charater_name}, what hero do you want to play ?'
 
+        for char in question:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
         # Here you can put the class heroes
 
         knight_hero = Knight()
@@ -64,7 +83,6 @@ class Menu:
 
         thief_hero = Thief()
         thief_hero.ability_discription()
-
 
         print("\n")
         self.user_char_choice = input(">").strip()
@@ -89,7 +107,7 @@ class Menu:
             thief_hero.ability_discription()
             print(self.message)
 
-
+    # Function to pick the map size.
     def pick_map(self):
         global map_choice
 
@@ -119,9 +137,8 @@ class Menu:
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
-            
 
-        pos = input('choose in which corner to begin :'
+        pos = input('\nChoose in which corner you want to begin :'
                     '\n1: upper right '
                     '\n2: lower right '
                     '\n3: upper left'
@@ -141,85 +158,7 @@ class Menu:
         map_choice.show_map()
         menu.start_game()
 
-    def user_name_creation(self):
-
-        self.charater_name = input("\nPlease, Enter your username character :\n>").strip().capitalize()
-
-        print("Creating your character ...")
-
-        #time.sleep(2)
-
-        print(f'Your character name {self.charater_name} has been created!')
-
-        #time.sleep(3)
-
-        os.system("cls")
-
-    def save_character(self):
-
-        self.file_saved = (self.charater_name + ".txt")
-
-        if self.user_char_choice == "1":
-            with open(self.file_saved,"a+") as file:
-                file.write(self.message)
-
-        elif self.user_char_choice == "2":
-            with open(self.file_saved, "a+") as file:
-                file.write(self.message)
-
-        elif self.user_char_choice == "3":
-            with open(self.file_saved, "a+") as file:
-                file.write(self.message)
-
-    def load_game(self):
-
-        self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
-
-        if self.show_saved_game == "y":
-
-            for file in os.listdir("."):
-                if file.endswith(".txt"):
-                    print(os.path.join(file).strip(".txt"))
-
-        else:
-            pass
-
-        self.check_username = input("\nPlease Enter your character username :\n>").strip().capitalize()
-
-        self.load_username = (self.check_username + ".txt")
-
-        if os.path.exists(self.load_username):
-
-            with open(self.load_username, "r") as file:
-
-                files = file.readline()
-
-                print("Loading Game ...")
-
-                #time.sleep(2)
-
-                print(files)
-
-        else:
-
-            print("This game doesn't exist.")
-
-    def delete_file(self):
-
-        for file in os.listdir("."):
-            if file.endswith(".txt"):
-                print(os.path.join(file).strip(".txt"))
-
-        self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
-
-        self.remove_file = (self.remove_file + ".txt")
-
-        os.remove(self.remove_file)
-        print("Removing saved game ...")
-        #time.sleep(2)
-        print("Game removed!")
-
-
+    # Function to start the new game in the menu.
     def new_user_game(self):
 
         if self.menu_choice == "1":
@@ -246,6 +185,110 @@ class Menu:
 
         else:
             print("Please follow the instruction you Dum Ass!")
+
+    # Function to start the game.
+    def start_game(self):
+
+        self.current_pos = ()
+
+        while True:
+
+            print('Use these command to move:\nW = up\nS = down\nA = left\nD = right')
+            cmd = input('>').lower().strip()
+
+            if cmd == 'w':
+                self.current_pos = map_choice.move_up()
+
+            elif cmd == 's':
+                self.current_pos = map_choice.move_down()
+
+            elif cmd == 'a':
+                self.current_pos = map_choice.move_left()
+
+            elif cmd == 'd':
+                self.current_pos = map_choice.move_right()
+
+            os.system('cls')
+            map_choice.show_map()
+
+            print(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]])
+            print(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]])
+
+            # if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0:
+
+    # Function to save the hero
+    def save_character(self):
+
+        self.file_saved = (self.charater_name + ".txt")
+
+        if self.user_char_choice == "1":
+            with open(self.file_saved, "a+") as file:
+                file.write(self.message + "\n")
+
+        elif self.user_char_choice == "2":
+            with open(self.file_saved, "a+") as file:
+                file.write(self.message + "\n")
+
+        elif self.user_char_choice == "3":
+            with open(self.file_saved, "a+") as file:
+                file.write(self.message + "\n")
+
+    # Function to load the hero
+    def load_game(self):
+
+        self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
+
+        if self.show_saved_game == "y":
+
+            for file in os.listdir("."):
+                if file.endswith(".txt"):
+                    print(os.path.join(file).strip(".txt"))
+
+        else:
+            pass
+
+        self.check_username = input("\nPlease Enter your character username :\n>").strip().capitalize()
+
+        self.load_username = (self.check_username + ".txt")
+
+        if os.path.exists(self.load_username):
+
+            with open(self.load_username, "r") as file:
+
+                files = file.read()
+
+                print("Loading Game ...")
+
+                time.sleep(2)
+
+                print(files)
+
+
+        else:
+
+            print("This game doesn't exist.")
+
+    # Function to delete the profile
+    def delete_file(self):
+        try:
+
+
+            for file in os.listdir("."):
+                if file.endswith(".txt"):
+                    print(os.path.join(file).strip(".txt"))
+
+            self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
+
+            self.remove_file = (self.remove_file + ".txt")
+
+            os.remove(self.remove_file)
+            print("Removing saved game ...")
+            time.sleep(2)
+            print("Game removed!")
+
+        except:
+
+            print("File not found. ")
 
 
 # Instance of the class Menu
