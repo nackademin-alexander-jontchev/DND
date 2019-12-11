@@ -45,7 +45,7 @@ class Maps:
                 monster_list = []
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.2:
-                    monster_list.append('big_spider')
+                    monster_list.append('big spider')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.15:
                     monster_list.append('skeleton')
