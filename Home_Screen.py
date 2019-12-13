@@ -91,13 +91,49 @@ class Menu:
             dict_agility_sum[character[0]] = sum_agility
         return dict_agility_sum
 
+    def battle(self, character1, character2):
+        sum_attack = self.gen_attack_sum(sorted_initiative)
+        sum_agility = self.gen_agility_sum(sorted_initiative)
+
+        if sum_attack[character1] > sum_agility[character2]:
+            print('\n'+character1.name + f' attacks {character2.name} and deals 1 damage')
+            character2.durability -= 1
+        else:
+            print('\n'+character1.name + ' tried to attack but missed\n')
+        return character2.durability
+
+
+
     def fight(self, monsters, treasures):
         active_monsters = self.link_str_obj(monsters, treasures)
+        global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
-        sum_attack = self.gen_attack_sum(sorted_initiative)
-        print(sum_attack)
-        sum_agility = self.gen_agility_sum(sorted_initiative)
-        print(sum_agility)
+        while True:
+            for character in sorted_initiative:
+                print(character[0].name + f's health:  {character[0].durability}')
+            print('\nThe turnorder is: ')
+            count=1
+            for character in sorted_initiative:
+                print(str(count) + ': ' + character[0].name)
+                count+=1
+            input('\npress any button to start fight.. ')
+            os.system('CLS')       
+
+
+            if self.battle(sorted_initiative[0][0], sorted_initiative[1][0]) > 0:
+                if self.battle(sorted_initiative[1][0], sorted_initiative[0][0]) > 0:
+                    pass
+                else:
+                    print('\n'+sorted_initiative[0][0].name+' died')
+                    map_choice.show_map()
+                    break
+            else: 
+                print('\n'+sorted_initiative[1][0].name+' died')
+                map_choice.show_map()
+                break
+                
+            
+
         
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
@@ -122,6 +158,7 @@ class Menu:
                 self.current_pos = map_choice.move_right()                
             os.system('CLS')
             map_choice.show_map()
+            #change to 'or' later
             if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 and len(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
                 self.new_room_options()
             
@@ -223,15 +260,10 @@ class Menu:
     def user_name_creation(self):
 
         self.charater_name = input("\nPlease, Enter your username character :\n>").strip().capitalize()
-
         print("Creating your character ...")
-
         #time.sleep(2)
-
         print(f'Your character name {self.charater_name} has been created!')
-
         #time.sleep(3)
-
         os.system("cls")
 
     def save_character(self):
@@ -253,34 +285,21 @@ class Menu:
     def load_game(self):
 
         self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
-
         if self.show_saved_game == "y":
-
             for file in os.listdir("."):
                 if file.endswith(".txt"):
                     print(os.path.join(file).strip(".txt"))
 
-        else:
-            pass
-
         self.check_username = input("\nPlease Enter your character username :\n>").strip().capitalize()
-
         self.load_username = (self.check_username + ".txt")
 
         if os.path.exists(self.load_username):
-
             with open(self.load_username, "r") as file:
-
                 files = file.readline()
-
                 print("Loading Game ...")
-
                 #time.sleep(2)
-
                 print(files)
-
         else:
-
             print("This game doesn't exist.")
 
     def delete_file(self):
@@ -290,9 +309,7 @@ class Menu:
                 print(os.path.join(file).strip(".txt"))
 
         self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
-
         self.remove_file = (self.remove_file + ".txt")
-
         os.remove(self.remove_file)
         print("Removing saved game ...")
         #time.sleep(2)
@@ -302,27 +319,16 @@ class Menu:
     def new_user_game(self):
 
         if self.menu_choice == "1":
-
             menu.user_name_creation()
-
             menu.pick_character()
-
             menu.save_character()
-
             menu.pick_map()
-
         elif self.menu_choice == "2":
-
             menu.load_game()
-
         elif self.menu_choice == "3":
-
             menu.delete_file()
-
         elif self.menu_choice == "4":
-
             print("\nSee you later!")
-
         else:
             print("Please follow the instruction you Dum Ass!")
 
