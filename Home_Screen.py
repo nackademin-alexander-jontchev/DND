@@ -6,20 +6,26 @@ from maps import Maps
 from monsters import Monsters
 from treasure import Treasure
 
+import sys
 import time
 import os.path
 from random import randint
-
-
 class Menu:
 
     def __init__(self):
 
-        print('-----Welcome to "Dungeon Run"-----')
-        print("1-New Game")
-        print("2-Load Game")
-        print("3-Remove saved Game")
-        print("4-Exit")
+        os.system("cls")
+        print("##################################")
+        print('#    Welcome to "Dungeon Run     #')
+        print("##################################")
+        print("\n")
+        print("          1-New Game              ")
+        print("          2-Load Game             ")
+        print("          3-Remove saved Game     ")
+        print("          4-Exit                  ")
+        print("\n")
+        print("     Copyright 2019 Originals     ")
+
         self.active_hero = ''
         self.menu_choice = input("\n>").strip()
         os.system("cls")
@@ -103,7 +109,6 @@ class Menu:
         return character2.durability
 
 
-
     def fight(self, monsters, treasures):
         active_monsters = self.link_str_obj(monsters, treasures)
         global sorted_initiative
@@ -119,7 +124,6 @@ class Menu:
             input('\npress any button to start fight.. ')
             os.system('CLS')       
 
-
             if self.battle(sorted_initiative[0][0], sorted_initiative[1][0]) > 0:
                 if self.battle(sorted_initiative[1][0], sorted_initiative[0][0]) > 0:
                     pass
@@ -132,21 +136,20 @@ class Menu:
                 map_choice.show_map()
                 break
                 
-            
-
         
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
-        print(f'Monsters in this room: {monsters} \nTreasures in this rooms: {treasures}')
-        cmd = input('Do you wish to fight? y/n\n>')
+        print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
+        cmd = input('\nDo you wish to fight? y/n\n>').lower().strip()
         if cmd == 'y':
             self.fight(monsters, treasures)
 
     def start_game(self):
         self.current_pos = ()
         while True:
-            print('w, s, a, d')
+            print('Use these command to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
+
             cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
@@ -156,30 +159,45 @@ class Menu:
                 self.current_pos = map_choice.move_left()
             elif cmd == 'd':
                 self.current_pos = map_choice.move_right()                
+            elif cmd == 'e':
+                print("See you later!")
+                sys.exit()
+
+
             os.system('CLS')
             map_choice.show_map()
             #change to 'or' later
             if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 and len(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
                 self.new_room_options()
             
+         
+
     def pick_character(self):
 
         print("\nChoose your character!")
+        question = f'Hello {self.charater_name}. Select the hero you want to play ?'
 
+        for char in question:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
         # Here you can put the class heroes
 
         knight_hero = Knight()
         knight_hero.ability_discription()
 
+        time.sleep(0.05)
         wizard_hero = Wizard()
         wizard_hero.ability_discription()
 
+        time.sleep(0.05)
         thief_hero = Thief()
         thief_hero.ability_discription()
 
 
         print("\n")
         self.user_char_choice = input(">").strip()
+
 
         os.system("cls")
 
@@ -212,18 +230,18 @@ class Menu:
         map_choice = Maps()
 
         print("\nPlease, choose your map size!")
+        print("\nChoose your map size!")
         print("\n1- Small map 4x4\n2- Medium map 5x5\n3- Large map 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
-
         os.system("cls")
 
         if self.user_map_choice == "1":
-            map_choice.create_small_map()
+            map_choice.create_small_map()            
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
-
+            
         elif self.user_map_choice == "2":
             map_choice.create_medium_map()
             map_choice.show_map()
@@ -235,14 +253,15 @@ class Menu:
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
-            
-
         pos = input('choose in which corner to begin :'
                     '\n1: upper right '
                     '\n2: lower right '
                     '\n3: upper left'
                     '\n4: lower left'
                     '\n>')
+        
+        os.system("cls")
+
         cmd = ''
         if pos == '1':
             cmd = 'ur'
@@ -264,23 +283,49 @@ class Menu:
         #time.sleep(2)
         print(f'Your character name {self.charater_name} has been created!')
         #time.sleep(3)
+        question = "Hello and welcome to 'Dungeon Run'.\nchoose a username for your character and let's get started!"
+
+        for char in question:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        self.charater_name = input("\n>").strip().capitalize()
+
+        question2 = "\nCreating your character ...\n"
+
+        for char in question2:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        time.sleep(1)
+
+        question3 = f'Your character name {self.charater_name} has been created!'
+
+        for char in question3:
+            sys.stdout.write(char)
+            sys.stdout.flush()
+            time.sleep(0.05)
+
+        time.sleep(2)
+
         os.system("cls")
 
     def save_character(self):
-
         self.file_saved = (self.charater_name + ".txt")
 
         if self.user_char_choice == "1":
-            with open(self.file_saved,"a+") as file:
-                file.write(self.message)
+            with open(self.file_saved, "a+") as file:
+                file.write(self.message + "\n")
 
         elif self.user_char_choice == "2":
             with open(self.file_saved, "a+") as file:
-                file.write(self.message)
+                file.write(self.message + "\n")
 
         elif self.user_char_choice == "3":
             with open(self.file_saved, "a+") as file:
-                file.write(self.message)
+                file.write(self.message + "\n")
 
     def load_game(self):
 
@@ -294,41 +339,62 @@ class Menu:
         self.load_username = (self.check_username + ".txt")
 
         if os.path.exists(self.load_username):
-            with open(self.load_username, "r") as file:
+            with open(self.load_username, "r") as file:     
                 files = file.readline()
                 print("Loading Game ...")
                 #time.sleep(2)
+
+                files = file.read()
+
+                print("Loading Game ...")
+
+                time.sleep(2)
+
                 print(files)
         else:
             print("This game doesn't exist.")
 
     def delete_file(self):
 
-        for file in os.listdir("."):
-            if file.endswith(".txt"):
-                print(os.path.join(file).strip(".txt"))
+        try:
 
-        self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
-        self.remove_file = (self.remove_file + ".txt")
-        os.remove(self.remove_file)
-        print("Removing saved game ...")
-        #time.sleep(2)
-        print("Game removed!")
+            for file in os.listdir("."):
+                if file.endswith(".txt"):
+                    print(os.path.join(file).strip(".txt"))
 
+            self.remove_file = input("\nWhich saved game you want to remove ?\n").strip()
+
+            self.remove_file = (self.remove_file + ".txt")
+
+            os.remove(self.remove_file)
+            print("Removing saved game ...")
+            time.sleep(2)
+            print("Game removed!")
+
+        except:
+
+            print("File not found. ")
 
     def new_user_game(self):
-
         if self.menu_choice == "1":
             menu.user_name_creation()
             menu.pick_character()
             menu.save_character()
+
             menu.pick_map()
+
         elif self.menu_choice == "2":
+
             menu.load_game()
+
         elif self.menu_choice == "3":
+
             menu.delete_file()
+
         elif self.menu_choice == "4":
+
             print("\nSee you later!")
+
         else:
             print("Please follow the instruction you Dum Ass!")
 
