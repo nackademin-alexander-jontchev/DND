@@ -4,7 +4,7 @@ from thief import Thief
 from maps import Maps
 from monsters import Monsters
 from treasure import Treasure
-
+from User import User
 import sys
 import time
 import os.path
@@ -56,7 +56,7 @@ class Menu:
 
         return fight_order
 
-    def link_str_obj(self, monsters, treasures):
+    def link_str_monster(self, monsters):
         # matches strings to objects
         global Monsters
         big_spider = Monsters('big spider', 7, 1, 2, 3, 0.2)
@@ -65,14 +65,6 @@ class Menu:
         skeleton = Monsters('skeleton', 4, 2, 3, 3, 0.15)
         list_monsters = [big_spider, orc, troll, skeleton]
 
-        loosecoins = Treasure('loose coins', 2, 0.4)
-        moneypouch = Treasure('money pouch', 6, 0.2)
-        goldjewelry = Treasure('golden jewelry', 10, 0.15)
-        gemstone = Treasure('gemstone', 14, 0.1)
-        smallchest = Treasure('small chest', 20, 0.05)
-        list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
-
-        active_treasure = []
         active_monsters = []
         for monster in monsters:
             for spawnobj in list_monsters:
@@ -80,16 +72,28 @@ class Menu:
                     active_monsters.append(spawnobj)
         active_monsters.append(self.active_hero)
 
+        return active_monsters
+
+    def link_str_treasures(self, treasures):
+
+        loosecoins = Treasure('loose coins', 2, 0.4)
+        moneypouch = Treasure('money pouch', 6, 0.2)
+        goldjewelry = Treasure('golden jewelry', 10, 0.15)
+        gemstone = Treasure('gemstone', 14, 0.1)
+        smallchest = Treasure('small chest', 20, 0.05)
+        list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
+        
+        
+        active_treasure = []
         for treasure in treasures:
             for spawnobj in list_treasure:
                 if treasure == spawnobj.name:
                     active_treasure.append(spawnobj)
-
-        return active_monsters
+        return active_treasure
 
     def died_function(self):
         pass
-    
+
     def gen_attack_sum(self, sorted_initiative):
         dict_attack_sum = {}
         for character in sorted_initiative:
@@ -99,6 +103,7 @@ class Menu:
                 sum_attack += dice
             dict_attack_sum[character[0]] = sum_attack
         return dict_attack_sum
+
 
     def gen_agility_sum(self, sorted_initiative):
         dict_agility_sum = {}
@@ -123,10 +128,10 @@ class Menu:
         return character2.durability
 
     def fight(self, monsters, treasures):
-        active_monsters = self.link_str_obj(monsters, treasures)
+        active_monsters = self.link_str_monster(monsters)
+        active_treasures = self.link_str_treasures(treasures)
         global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
-        nr_of_battles = len(sorted_initiative)
 
         while True:
             for character in sorted_initiative:
@@ -156,28 +161,33 @@ class Menu:
                 if self.battle(character2, character1) > 0:
                     pass
                 else:
-                    print('\n' + character1.name + ' died')
+                    print('\n' + character1.name + ' died\n')
                     if character1.type == 'monster':
                         map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                        map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
                     else:
                         self.died_function()
                         break
                     sorted_initiative.pop(0)
-                    nr_of_battles=-1
                     if len(sorted_initiative) == 1:
+                        for treasure in active_treasures:
+                            user.wallet += treasure.value
                         map_choice.show_map()
                         break
             else:
-                print('\n' + character2.name + ' died')
+                print('\n' + character2.name + ' died\n')
                 if character2.type == 'monster':
                     map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                    map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+
                 else:
                     self.died_function()
                     break
                 sorted_initiative.pop(1)
 
-                nr_of_battles=-1
                 if len(sorted_initiative) == 1:
+                    for treasure in active_treasures:
+                        user.wallet += treasure.value
                     map_choice.show_map()
                     break
                 
@@ -194,7 +204,8 @@ class Menu:
         self.current_pos = ()
 
         while True:
-            print('Use these command to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
+            print('wallet: ' + str(user.wallet))
+            print('Use these commands to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
 
             cmd = input('>').lower().strip()
             if cmd == 'w':
@@ -219,7 +230,7 @@ class Menu:
     def pick_character(self):
 
         question = f'Hello {self.charater_name}. Select the hero you want to play ?'
-
+        
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
@@ -251,7 +262,7 @@ class Menu:
 
         elif self.user_char_choice == "2":
 
-            self.message = "You are a Wizard!"
+            self.message = "You are a Wizard!" 
             wizard_hero.ability_discription()
             self.active_hero = wizard_hero
             print(self.message)
@@ -263,6 +274,8 @@ class Menu:
             thief_hero.ability_discription()
             self.active_hero = thief_hero
             print(self.message)
+        global user
+        user = User(self.charater_name, self.active_hero,0,0)
 
     def pick_map(self):
         global map_choice
@@ -293,13 +306,14 @@ class Menu:
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+
         pos = input('choose in which corner to begin :'
                     '\n1: upper right '
                     '\n2: lower right '
                     '\n3: upper left'
                     '\n4: lower left'
                     '\n>')
-
+        
         os.system("cls")
 
         cmd = ''
