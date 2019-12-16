@@ -12,6 +12,7 @@ class Maps:
         self.current_position = ()
         self.monster_map = []
         self.treasure_map = []
+        self.previous_position= []
 
     def create_small_map(self):
         self.small_map = [['X'] * 4 for i in range(4)]
@@ -119,6 +120,8 @@ class Maps:
             return self.current_position
         except:
             print('Out of bounds')
+            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
+            return self.current_position
         
 
     def move_down(self):
@@ -129,6 +132,8 @@ class Maps:
             return self.current_position
         except:
             print('Out of bounds')
+            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
+            return self.current_position
 
     def move_left(self):
         try:
@@ -138,8 +143,11 @@ class Maps:
             return self.current_position
         except:
             print('Out of bounds')
+            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
+            return self.current_position
 
     def move_right(self):
+
         try:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0]][self.current_position[1] + 1] = '@'
@@ -147,3 +155,6 @@ class Maps:
             return self.current_position
         except:
             print('Out of bounds')
+            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
+            return self.current_position
+

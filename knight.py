@@ -21,4 +21,3 @@ class Knight:
         print(f"|The knight always blocks the first attack per battle with his shield,|\n"
               f"|and therefore need not avoid or take any damage                      |")
         print(f" ---------------------------------------------------------------------")
-

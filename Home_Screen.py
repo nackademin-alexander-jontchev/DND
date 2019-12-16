@@ -1,4 +1,3 @@
-
 from knight import Knight
 from wizard import Wizard
 from thief import Thief
@@ -10,6 +9,8 @@ import sys
 import time
 import os.path
 from random import randint
+
+
 class Menu:
 
     def __init__(self):
@@ -37,10 +38,9 @@ class Menu:
                 if fight_order_list[j][1] < fight_order_list[j + 1][1]:
                     fight_order_list[j], fight_order_list[j + 1] = fight_order_list[j + 1], fight_order_list[j]
         return fight_order_list
-    
 
     def sequence(self, list_of_participants):
-        #sorts by initiative
+        # sorts by initiative
         fight_order = []
         for participant in list_of_participants:
             fighter_list = []
@@ -51,18 +51,18 @@ class Menu:
             fighter_list.append(participant)
             fighter_list.append(sum_of_ini)
             fight_order.append(fighter_list)
-            
+
             fight_order = self.sort_fight_order(fight_order)
 
         return fight_order
 
     def link_str_obj(self, monsters, treasure):
-            #matches strings to objects
+        # matches strings to objects
         global Monsters
-        big_spider = Monsters('big spider',7, 1, 2, 3, 0.2)
-        orc = Monsters('orc',6, 3, 4, 4, 0.1)
-        troll = Monsters('troll',2, 4, 7, 2, 0.05)
-        skeleton = Monsters('skeleton',4,2,3,3,0.15)
+        big_spider = Monsters('big spider', 7, 1, 2, 3, 0.2)
+        orc = Monsters('orc', 6, 3, 4, 4, 0.1)
+        troll = Monsters('troll', 2, 4, 7, 2, 0.05)
+        skeleton = Monsters('skeleton', 4, 2, 3, 3, 0.15)
         loosecoins = Treasure('loose coins', 2, 0.4)
         moneypouch = Treasure('money pouch', 6, 0.2)
         goldjewelry = Treasure('golden jewelry', 10, 0.15)
@@ -71,7 +71,7 @@ class Menu:
         list_monsters = [big_spider, orc, troll, skeleton]
         active_monsters = []
         for monster in monsters:
-           for spawnobj in list_monsters:
+            for spawnobj in list_monsters:
                 if monster == spawnobj.name:
                     active_monsters.append(spawnobj)
         active_monsters.append(self.active_hero)
@@ -82,17 +82,17 @@ class Menu:
         for character in sorted_initiative:
             sum_attack = 0
             for x in range(character[0].attack):
-                dice = randint(1,6)
+                dice = randint(1, 6)
                 sum_attack += dice
             dict_attack_sum[character[0]] = sum_attack
         return dict_attack_sum
-    
+
     def gen_agility_sum(self, sorted_initiative):
         dict_agility_sum = {}
         for character in sorted_initiative:
             sum_agility = 0
             for x in range(character[0].attack):
-                dice = randint(1,6)
+                dice = randint(1, 6)
                 sum_agility += dice
             dict_agility_sum[character[0]] = sum_agility
         return dict_agility_sum
@@ -102,12 +102,11 @@ class Menu:
         sum_agility = self.gen_agility_sum(sorted_initiative)
 
         if sum_attack[character1] > sum_agility[character2]:
-            print('\n'+character1.name + f' attacks {character2.name} and deals 1 damage')
+            print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
             character2.durability -= 1
         else:
-            print('\n'+character1.name + ' tried to attack but missed\n')
+            print('\n' + character1.name + ' tried to attack but missed\n')
         return character2.durability
-
 
     def fight(self, monsters, treasures):
         active_monsters = self.link_str_obj(monsters, treasures)
@@ -117,26 +116,25 @@ class Menu:
             for character in sorted_initiative:
                 print(character[0].name + f's health:  {character[0].durability}')
             print('\nThe turnorder is: ')
-            count=1
+            count = 1
             for character in sorted_initiative:
                 print(str(count) + ': ' + character[0].name)
-                count+=1
+                count += 1
             input('\npress any button to start fight.. ')
-            os.system('CLS')       
+            os.system('CLS')
 
             if self.battle(sorted_initiative[0][0], sorted_initiative[1][0]) > 0:
                 if self.battle(sorted_initiative[1][0], sorted_initiative[0][0]) > 0:
                     pass
                 else:
-                    print('\n'+sorted_initiative[0][0].name+' died')
+                    print('\n' + sorted_initiative[0][0].name + ' died')
                     map_choice.show_map()
                     break
-            else: 
-                print('\n'+sorted_initiative[1][0].name+' died')
+            else:
+                print('\n' + sorted_initiative[1][0].name + ' died')
                 map_choice.show_map()
                 break
-                
-        
+
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
@@ -147,6 +145,7 @@ class Menu:
 
     def start_game(self):
         self.current_pos = ()
+
         while True:
             print('Use these command to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
 
@@ -158,46 +157,40 @@ class Menu:
             elif cmd == 'a':
                 self.current_pos = map_choice.move_left()
             elif cmd == 'd':
-                self.current_pos = map_choice.move_right()                
+                self.current_pos = map_choice.move_right()
             elif cmd == 'e':
                 print("See you later!")
                 sys.exit()
 
-
             os.system('CLS')
             map_choice.show_map()
-            #change to 'or' later
-            if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 and len(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
-                self.new_room_options()
-            
-         
+            # change to 'or' later
+            # if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 or len(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
+            #     self.new_room_options()
 
     def pick_character(self):
 
-        print("\nChoose your character!")
         question = f'Hello {self.charater_name}. Select the hero you want to play ?'
 
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
         # Here you can put the class heroes
 
         knight_hero = Knight()
         knight_hero.ability_discription()
 
-        time.sleep(0.05)
+        # time.sleep(0.05)
         wizard_hero = Wizard()
         wizard_hero.ability_discription()
 
-        time.sleep(0.05)
+        # time.sleep(0.05)
         thief_hero = Thief()
         thief_hero.ability_discription()
 
-
         print("\n")
         self.user_char_choice = input(">").strip()
-
 
         os.system("cls")
 
@@ -223,7 +216,6 @@ class Menu:
             self.active_hero = thief_hero
             print(self.message)
 
-
     def pick_map(self):
         global map_choice
 
@@ -237,11 +229,11 @@ class Menu:
         os.system("cls")
 
         if self.user_map_choice == "1":
-            map_choice.create_small_map()            
+            map_choice.create_small_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
-            
+
         elif self.user_map_choice == "2":
             map_choice.create_medium_map()
             map_choice.show_map()
@@ -259,7 +251,7 @@ class Menu:
                     '\n3: upper left'
                     '\n4: lower left'
                     '\n>')
-        
+
         os.system("cls")
 
         cmd = ''
@@ -278,17 +270,12 @@ class Menu:
 
     def user_name_creation(self):
 
-        self.charater_name = input("\nPlease, Enter your username character :\n>").strip().capitalize()
-        print("Creating your character ...")
-        #time.sleep(2)
-        print(f'Your character name {self.charater_name} has been created!')
-        #time.sleep(3)
         question = "Hello and welcome to 'Dungeon Run'.\nchoose a username for your character and let's get started!"
 
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
         self.charater_name = input("\n>").strip().capitalize()
 
@@ -297,18 +284,18 @@ class Menu:
         for char in question2:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
-        time.sleep(1)
+        # time.sleep(1)
 
         question3 = f'Your character name {self.charater_name} has been created!'
 
         for char in question3:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
-        time.sleep(2)
+        # time.sleep(2)
 
         os.system("cls")
 
@@ -339,16 +326,16 @@ class Menu:
         self.load_username = (self.check_username + ".txt")
 
         if os.path.exists(self.load_username):
-            with open(self.load_username, "r") as file:     
+            with open(self.load_username, "r") as file:
                 files = file.readline()
                 print("Loading Game ...")
-                #time.sleep(2)
+                # time.sleep(2)
 
                 files = file.read()
 
                 print("Loading Game ...")
 
-                time.sleep(2)
+                # time.sleep(2)
 
                 print(files)
         else:
@@ -368,7 +355,7 @@ class Menu:
 
             os.remove(self.remove_file)
             print("Removing saved game ...")
-            time.sleep(2)
+            # time.sleep(2)
             print("Game removed!")
 
         except:
