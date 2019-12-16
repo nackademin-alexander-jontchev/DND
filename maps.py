@@ -61,12 +61,13 @@ class Maps:
         self.monster_map = deepcopy(monster_board)
 
     def randomize_treasure(self):
-        # makes a copy if the map woth treassures
+        # makes a copy if the map woth treasures
         treasure_board = deepcopy(self.current_map.copy())
 
         for row in treasure_board:
             for room in row:
                 treassure_list = []
+
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.40:
                     treassure_list.append('loose coins')

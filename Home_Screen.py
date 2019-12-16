@@ -109,6 +109,8 @@ class Menu:
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
         print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
+
+
         cmd = input('\nDo you wish to fight? y/n\n>').lower().strip()
         if cmd == 'y':
             self.fight(monsters, treasures)
