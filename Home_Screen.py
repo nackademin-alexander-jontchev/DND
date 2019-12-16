@@ -56,25 +56,35 @@ class Menu:
 
         return fight_order
 
-    def link_str_obj(self, monsters, treasure):
+    def link_str_obj(self, monsters, treasures):
         # matches strings to objects
         global Monsters
         big_spider = Monsters('big spider', 7, 1, 2, 3, 0.2)
         orc = Monsters('orc', 6, 3, 4, 4, 0.1)
         troll = Monsters('troll', 2, 4, 7, 2, 0.05)
         skeleton = Monsters('skeleton', 4, 2, 3, 3, 0.15)
+        list_monsters = [big_spider, orc, troll, skeleton]
+
         loosecoins = Treasure('loose coins', 2, 0.4)
         moneypouch = Treasure('money pouch', 6, 0.2)
         goldjewelry = Treasure('golden jewelry', 10, 0.15)
         gemstone = Treasure('gemstone', 14, 0.1)
         smallchest = Treasure('small chest', 20, 0.05)
-        list_monsters = [big_spider, orc, troll, skeleton]
+        list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
+
+        active_treasure = []
         active_monsters = []
         for monster in monsters:
             for spawnobj in list_monsters:
                 if monster == spawnobj.name:
                     active_monsters.append(spawnobj)
         active_monsters.append(self.active_hero)
+
+        for treasure in treasures:
+            for spawnobj in list_treasure:
+                if treasure == spawnobj.name:
+                    active_treasure.append(spawnobj)
+
         return active_monsters
 
     def gen_attack_sum(self, sorted_initiative):
@@ -165,8 +175,9 @@ class Menu:
             os.system('CLS')
             map_choice.show_map()
             # change to 'or' later
-            # if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 or len(map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
-            #     self.new_room_options()
+            if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 or len(
+                    map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
+                self.new_room_options()
 
     def pick_character(self):
 
