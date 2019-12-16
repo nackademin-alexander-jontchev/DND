@@ -1,10 +1,12 @@
 class Wizard:
 
     def __init__(self):
+        self.name = 'Thief'
         self.initiative = 6
         self.durability = 4
         self.attack = 9
         self.agility = 5
+        self.type = 'hero'
 
     def ability_discription(self):
 

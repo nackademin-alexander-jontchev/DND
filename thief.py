@@ -1,11 +1,12 @@
 class Thief():
 
     def __init__(self):
+        self.name = 'Thief'
         self.initiative = 7
         self.durability = 5
         self.attack = 5
         self.agility = 7
-
+        self.type = 'hero'
     def ability_discription(self):
 
         print("\n3-Thief")

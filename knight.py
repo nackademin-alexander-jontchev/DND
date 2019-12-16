@@ -1,10 +1,12 @@
 class Knight:
 
     def __init__(self):
+        self.name = 'Knight'
         self.initiative = 5
         self.durability = 9
         self.attack = 6
         self.agility = 5
+        self.type = 'hero'
         
     def ability_discription(self):
     
@@ -19,4 +21,3 @@ class Knight:
         print(f"|The knight always blocks the first attack per battle with his shield,|\n"
               f"|and therefore need not avoid or take any damage                      |")
         print(f" ---------------------------------------------------------------------")
-

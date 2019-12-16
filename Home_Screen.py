@@ -56,27 +56,40 @@ class Menu:
 
         return fight_order
 
-    def link_str_obj(self, monsters, treasure):
+    def link_str_obj(self, monsters, treasures):
         # matches strings to objects
         global Monsters
         big_spider = Monsters('big spider', 7, 1, 2, 3, 0.2)
         orc = Monsters('orc', 6, 3, 4, 4, 0.1)
         troll = Monsters('troll', 2, 4, 7, 2, 0.05)
         skeleton = Monsters('skeleton', 4, 2, 3, 3, 0.15)
+        list_monsters = [big_spider, orc, troll, skeleton]
+
         loosecoins = Treasure('loose coins', 2, 0.4)
         moneypouch = Treasure('money pouch', 6, 0.2)
         goldjewelry = Treasure('golden jewelry', 10, 0.15)
         gemstone = Treasure('gemstone', 14, 0.1)
         smallchest = Treasure('small chest', 20, 0.05)
-        list_monsters = [big_spider, orc, troll, skeleton]
+        list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
+
+        active_treasure = []
         active_monsters = []
         for monster in monsters:
             for spawnobj in list_monsters:
                 if monster == spawnobj.name:
                     active_monsters.append(spawnobj)
         active_monsters.append(self.active_hero)
+
+        for treasure in treasures:
+            for spawnobj in list_treasure:
+                if treasure == spawnobj.name:
+                    active_treasure.append(spawnobj)
+
         return active_monsters
 
+    def died_function(self):
+        pass
+    
     def gen_attack_sum(self, sorted_initiative):
         dict_attack_sum = {}
         for character in sorted_initiative:
@@ -97,13 +110,77 @@ class Menu:
             dict_agility_sum[character[0]] = sum_agility
         return dict_agility_sum
 
+
+    def battle(self, character1, character2):
+        sum_attack = self.gen_attack_sum(sorted_initiative)
+        sum_agility = self.gen_agility_sum(sorted_initiative)
+
+        if sum_attack[character1] > sum_agility[character2]:
+            print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
+            character2.durability -= 1
+        else:
+            print('\n' + character1.name + ' tried to attack but missed\n')
+        return character2.durability
+
     def fight(self, monsters, treasures):
         active_monsters = self.link_str_obj(monsters, treasures)
+        global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
-        sum_attack = self.gen_attack_sum(sorted_initiative)
-        print(sum_attack)
-        sum_agility = self.gen_agility_sum(sorted_initiative)
-        print(sum_agility)
+        nr_of_battles = len(sorted_initiative)
+
+        while True:
+            for character in sorted_initiative:
+                try:
+                    print(character[0].name + f's health:  {character[0].durability}')
+                except:
+                    pass
+            print('\nThe turnorder is: ')
+            count = 1
+            for character in sorted_initiative:
+                try:
+                    print(str(count) + ': ' + character[0].name)
+                    count += 1
+                except:
+                    pass
+            input('\npress any button to start fight.. ')
+            os.system('CLS')
+
+            character1 = sorted_initiative[0][0]
+            character2 = sorted_initiative[1][0]
+            try:
+                if character1.type == 'monster':
+                    character2 = self.active_hero
+            except:
+                pass
+            if self.battle(character1, character2) > 0:
+                if self.battle(character2, character1) > 0:
+                    pass
+                else:
+                    print('\n' + character1.name + ' died')
+                    if character1.type == 'monster':
+                        map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                    else:
+                        self.died_function()
+                        break
+                    sorted_initiative.pop(0)
+                    nr_of_battles=-1
+                    if len(sorted_initiative) == 1:
+                        map_choice.show_map()
+                        break
+            else:
+                print('\n' + character2.name + ' died')
+                if character2.type == 'monster':
+                    map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                else:
+                    self.died_function()
+                    break
+                sorted_initiative.pop(1)
+
+                nr_of_battles=-1
+                if len(sorted_initiative) == 1:
+                    map_choice.show_map()
+                    break
+                
 
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
@@ -117,8 +194,10 @@ class Menu:
 
     def start_game(self):
         self.current_pos = ()
+
         while True:
             print('Use these command to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
+
             cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
@@ -134,7 +213,8 @@ class Menu:
 
             os.system('CLS')
             map_choice.show_map()
-            if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 and len(
+            # change to 'or' later
+            if len(map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]) != 0 or len(
                     map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]) != 0:
                 self.new_room_options()
 
@@ -145,15 +225,17 @@ class Menu:
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
         # Here you can put the class heroes
 
         knight_hero = Knight()
         knight_hero.ability_discription()
-        time.sleep(0.05)
+
+        # time.sleep(0.05)
         wizard_hero = Wizard()
         wizard_hero.ability_discription()
-        time.sleep(0.05)
+
+        # time.sleep(0.05)
         thief_hero = Thief()
         thief_hero.ability_discription()
 
@@ -179,6 +261,7 @@ class Menu:
         elif self.user_char_choice == "3":
 
             self.message = "You are a Thief!"
+
             thief_hero.ability_discription()
             self.active_hero = thief_hero
             print(self.message)
@@ -188,11 +271,11 @@ class Menu:
 
         map_choice = Maps()
 
+        print("\nPlease, choose your map size!")
         print("\nChoose your map size!")
         print("\n1- Small map 4x4\n2- Medium map 5x5\n3- Large map 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
-
         os.system("cls")
 
         if self.user_map_choice == "1":
@@ -212,14 +295,13 @@ class Menu:
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
-
         pos = input('choose in which corner to begin :'
                     '\n1: upper right '
                     '\n2: lower right '
                     '\n3: upper left'
                     '\n4: lower left'
                     '\n>')
-        
+
         os.system("cls")
 
         cmd = ''
@@ -243,7 +325,7 @@ class Menu:
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
         self.charater_name = input("\n>").strip().capitalize()
 
@@ -252,23 +334,22 @@ class Menu:
         for char in question2:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
-        time.sleep(1)
+        # time.sleep(1)
 
         question3 = f'Your character name {self.charater_name} has been created!'
 
         for char in question3:
             sys.stdout.write(char)
             sys.stdout.flush()
-            time.sleep(0.05)
+            # time.sleep(0.05)
 
-        time.sleep(2)
+        # time.sleep(2)
 
         os.system("cls")
 
     def save_character(self):
-
         self.file_saved = (self.charater_name + ".txt")
 
         if self.user_char_choice == "1":
@@ -286,34 +367,28 @@ class Menu:
     def load_game(self):
 
         self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
-
         if self.show_saved_game == "y":
-
             for file in os.listdir("."):
                 if file.endswith(".txt"):
                     print(os.path.join(file).strip(".txt"))
 
-        else:
-            pass
-
         self.check_username = input("\nPlease Enter your character username :\n>").strip().capitalize()
-
         self.load_username = (self.check_username + ".txt")
 
         if os.path.exists(self.load_username):
-
             with open(self.load_username, "r") as file:
+                files = file.readline()
+                print("Loading Game ...")
+                # time.sleep(2)
 
                 files = file.read()
 
                 print("Loading Game ...")
 
-                time.sleep(2)
+                # time.sleep(2)
 
                 print(files)
-
         else:
-
             print("This game doesn't exist.")
 
     def delete_file(self):
@@ -330,7 +405,7 @@ class Menu:
 
             os.remove(self.remove_file)
             print("Removing saved game ...")
-            time.sleep(2)
+            # time.sleep(2)
             print("Game removed!")
 
         except:
@@ -338,13 +413,9 @@ class Menu:
             print("File not found. ")
 
     def new_user_game(self):
-
         if self.menu_choice == "1":
-
             menu.user_name_creation()
-
             menu.pick_character()
-
             menu.save_character()
 
             menu.pick_map()
