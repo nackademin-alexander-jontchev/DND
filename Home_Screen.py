@@ -87,6 +87,9 @@ class Menu:
 
         return active_monsters
 
+    def died_function(self):
+        pass
+    
     def gen_attack_sum(self, sorted_initiative):
         dict_attack_sum = {}
         for character in sorted_initiative:
