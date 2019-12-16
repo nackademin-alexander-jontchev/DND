@@ -107,6 +107,7 @@ class Menu:
             dict_agility_sum[character[0]] = sum_agility
         return dict_agility_sum
 
+
     def battle(self, character1, character2):
         sum_attack = self.gen_attack_sum(sorted_initiative)
         sum_agility = self.gen_agility_sum(sorted_initiative)
@@ -122,28 +123,61 @@ class Menu:
         active_monsters = self.link_str_obj(monsters, treasures)
         global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
+        nr_of_battles = len(sorted_initiative)
+
         while True:
             for character in sorted_initiative:
-                print(character[0].name + f's health:  {character[0].durability}')
+                try:
+                    print(character[0].name + f's health:  {character[0].durability}')
+                except:
+                    pass
             print('\nThe turnorder is: ')
             count = 1
             for character in sorted_initiative:
-                print(str(count) + ': ' + character[0].name)
-                count += 1
+                try:
+                    print(str(count) + ': ' + character[0].name)
+                    count += 1
+                except:
+                    pass
             input('\npress any button to start fight.. ')
             os.system('CLS')
 
-            if self.battle(sorted_initiative[0][0], sorted_initiative[1][0]) > 0:
-                if self.battle(sorted_initiative[1][0], sorted_initiative[0][0]) > 0:
+            character1 = sorted_initiative[0][0]
+            character2 = sorted_initiative[1][0]
+            try:
+                if character1.type == 'monster':
+                    character2 = self.active_hero
+            except:
+                pass
+            if self.battle(character1, character2) > 0:
+                if self.battle(character2, character1) > 0:
                     pass
                 else:
-                    print('\n' + sorted_initiative[0][0].name + ' died')
+                    print('\n' + character1.name + ' died')
+                    if character1.type == 'monster':
+                        map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                    else:
+                        self.died_function()
+                        break
+                    sorted_initiative.pop(0)
+                    nr_of_battles=-1
+                    if len(sorted_initiative) == 1:
+                        map_choice.show_map()
+                        break
+            else:
+                print('\n' + character2.name + ' died')
+                if character2.type == 'monster':
+                    map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                else:
+                    self.died_function()
+                    break
+                sorted_initiative.pop(1)
+
+                nr_of_battles=-1
+                if len(sorted_initiative) == 1:
                     map_choice.show_map()
                     break
-            else:
-                print('\n' + sorted_initiative[1][0].name + ' died')
-                map_choice.show_map()
-                break
+                
 
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
