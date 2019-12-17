@@ -82,7 +82,7 @@ class Menu:
         gemstone = Treasure('gemstone', 14, 0.1)
         smallchest = Treasure('small chest', 20, 0.05)
         list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
-        
+
         active_treasure = []
         for treasure in treasures:
             for spawnobj in list_treasure:
@@ -113,7 +113,6 @@ class Menu:
             dict_agility_sum[character[0]] = sum_agility
         return dict_agility_sum
 
-
     def battle(self, character1, character2):
         sum_attack = self.gen_attack_sum(sorted_initiative)
         sum_agility = self.gen_agility_sum(sorted_initiative)
@@ -124,6 +123,20 @@ class Menu:
         else:
             print('\n' + character1.name + ' tried to attack but missed\n')
         return character2.durability
+
+    def escape_fight(self):
+        escape_chance = randint(1, 100)
+
+        if self.active_hero.name == "Wizard":
+            if (escape_chance / 100) <= 0.8:
+                return True
+            else:
+                return False
+        else:
+            if (escape_chance / 100) <= (self.active_hero.agility * 10 / 100):
+                return True
+            else:
+                return False
 
     def fight(self, monsters, treasures):
         active_monsters = self.link_str_monster(monsters)
@@ -185,7 +198,7 @@ class Menu:
                     for treasure in active_treasures:
                         user.wallet += treasure.value
                     map_choice.show_map()
-                    break        
+                    break
 
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
@@ -200,15 +213,15 @@ class Menu:
             treasures = self.link_str_treasures(treasures)
             for treasure in treasures:
                 user.wallet += treasure.value
-            
+
 
     def start_game(self):
         self.current_pos = ()
-
+        global previous_position
         while True:
             print('wallet: ' + str(user.wallet))
             print('Use these commands to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
-
+            previous_position = self.current_pos
             cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
@@ -232,7 +245,7 @@ class Menu:
     def pick_character(self):
 
         question = f'Hello {self.charater_name}. Select the hero you want to play ?'
-        
+
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
@@ -262,7 +275,7 @@ class Menu:
             print(self.message)
 
         elif self.user_char_choice == "2":
-            self.message = "You are a Wizard!" 
+            self.message = "You are a Wizard!"
             wizard_hero.ability_discription()
             self.active_hero = wizard_hero
             print(self.message)
@@ -313,7 +326,7 @@ class Menu:
                     '\n3: upper left'
                     '\n4: lower left'
                     '\n>')
-        
+
         os.system("cls")
 
         cmd = ''
