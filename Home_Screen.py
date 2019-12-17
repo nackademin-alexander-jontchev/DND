@@ -88,8 +88,15 @@ class Menu:
         return active_monsters
 
     def died_function(self):
-        pass
-    
+        os.system("cls")
+        print("You have been defeated!")
+        replay = input("\nDo you play again or exit the game ?\n1-Play again\n2-Exit\n>").strip()
+        if replay == "1":
+            menu.pick_character()
+            menu.pick_map()
+        else:
+            sys.exit()
+
     def gen_attack_sum(self, sorted_initiative):
         dict_attack_sum = {}
         for character in sorted_initiative:

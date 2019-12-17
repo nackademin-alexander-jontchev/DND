@@ -1,7 +1,7 @@
 class Wizard:
 
     def __init__(self):
-        self.name = 'Thief'
+        self.name = 'Wizard'
         self.initiative = 6
         self.durability = 4
         self.attack = 9
