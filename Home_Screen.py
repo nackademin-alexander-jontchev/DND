@@ -83,7 +83,6 @@ class Menu:
         smallchest = Treasure('small chest', 20, 0.05)
         list_treasure = [loosecoins, moneypouch, goldjewelry, gemstone, smallchest]
         
-        
         active_treasure = []
         for treasure in treasures:
             for spawnobj in list_treasure:
@@ -103,7 +102,6 @@ class Menu:
                 sum_attack += dice
             dict_attack_sum[character[0]] = sum_attack
         return dict_attack_sum
-
 
     def gen_agility_sum(self, sorted_initiative):
         dict_agility_sum = {}
@@ -179,26 +177,30 @@ class Menu:
                 if character2.type == 'monster':
                     map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
                     map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
-
                 else:
                     self.died_function()
                     break
                 sorted_initiative.pop(1)
-
                 if len(sorted_initiative) == 1:
                     for treasure in active_treasures:
                         user.wallet += treasure.value
                     map_choice.show_map()
-                    break
-                
+                    break        
 
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
+
         print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
-        cmd = input('\nDo you wish to fight? y/n\n>').lower().strip()
-        if cmd == 'y':
-            self.fight(monsters, treasures)
+        if len(monsters) > 0:
+            cmd = input('\nDo you wish to fight? y/n\n>').lower().strip()
+            if cmd == 'y':
+                self.fight(monsters, treasures)
+        elif len(treasures) > 0:
+            treasures = self.link_str_treasures(treasures)
+            for treasure in treasures:
+                user.wallet += treasure.value
+            
 
     def start_game(self):
         self.current_pos = ()
@@ -254,14 +256,12 @@ class Menu:
         os.system("cls")
 
         if self.user_char_choice == "1":
-
             self.message = "You are a Knight!"
             knight_hero.ability_discription()
             self.active_hero = knight_hero
             print(self.message)
 
         elif self.user_char_choice == "2":
-
             self.message = "You are a Wizard!" 
             wizard_hero.ability_discription()
             self.active_hero = wizard_hero
