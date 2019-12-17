@@ -115,12 +115,17 @@ class Menu:
         return dict_agility_sum
 
     def battle(self, character1, character2):
+        thief_special_dice_roll = (randint(0, 100) / 100)
         sum_attack = self.gen_attack_sum(sorted_initiative)
         sum_agility = self.gen_agility_sum(sorted_initiative)
 
         if sum_attack[character1] > sum_agility[character2]:
             print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
-            character2.durability -= 1
+            if self.active_hero.name == "Thief" and thief_special_dice_roll <= 0.25:
+                print("Critical!")
+                character2.durability -= 2
+            else:
+                character2.durability -= 1
         else:
             print('\n' + character1.name + ' tried to attack but missed\n')
         return character2.durability
@@ -178,8 +183,10 @@ class Menu:
                     else:
                         print('\n' + character1.name + ' died\n')
                         if character1.type == 'monster':
-                            map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
-                            map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                            map_choice.monster_map[map_choice.current_position[0]][
+                                map_choice.current_position[1]].clear()
+                            map_choice.treasure_map[map_choice.current_position[0]][
+                                map_choice.current_position[1]].clear()
                         else:
                             self.died_function()
                             break
@@ -221,13 +228,12 @@ class Menu:
 
         print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
         if len(monsters) > 0:
-            self.fight(monsters,treasures)
+            self.fight(monsters, treasures)
 
         elif len(treasures) > 0:
             treasures = self.link_str_treasures(treasures)
             for treasure in treasures:
                 user.wallet += treasure.value
-
 
     def start_game(self):
         self.current_pos = ()
@@ -303,7 +309,7 @@ class Menu:
             self.active_hero = thief_hero
             print(self.message)
         global user
-        user = User(self.charater_name, self.active_hero,0,0)
+        user = User(self.charater_name, self.active_hero, 0, 0)
 
     def pick_map(self):
         global map_choice
