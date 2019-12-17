@@ -12,7 +12,7 @@ class Maps:
         self.current_position = ()
         self.monster_map = []
         self.treasure_map = []
-        self.previous_position= []
+        self.previous_position = []
 
     def create_small_map(self):
         self.small_map = [['X'] * 4 for i in range(4)]
@@ -40,7 +40,6 @@ class Maps:
         # makes a copy of the map with monsters in it
         monster_board = deepcopy(self.current_map.copy())
 
-      
         for row in monster_board:
             for room in row:
                 monster_list = []
@@ -113,6 +112,7 @@ class Maps:
             self.current_map[len(self.current_map) - 1][0] = '@'
             self.current_position = (len(self.current_map) - 1, 0)
 
+
     def move_up(self):
         try:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
@@ -123,7 +123,6 @@ class Maps:
             print('Out of bounds')
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
-        
 
     def move_down(self):
         try:
@@ -159,3 +158,8 @@ class Maps:
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
 
+    def escape_room(self, previous_pos):
+        self.current_map[self.current_position[0]][self.current_position[1]] = 'X'
+        self.current_position = previous_pos
+        self.current_map[self.current_position[0]][self.current_position[1]] = '@'
+        return self.current_position
