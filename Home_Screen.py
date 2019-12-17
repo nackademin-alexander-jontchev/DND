@@ -9,6 +9,7 @@ import sys
 import time
 import os.path
 from random import randint
+from copy import deepcopy
 
 
 class Menu:
@@ -143,8 +144,9 @@ class Menu:
         active_treasures = self.link_str_treasures(treasures)
         global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
+        fight_loop = True
 
-        while True:
+        while fight_loop:
             for character in sorted_initiative:
                 try:
                     print(character[0].name + f's health:  {character[0].durability}')
@@ -158,47 +160,60 @@ class Menu:
                     count += 1
                 except:
                     pass
-            input('\npress any button to start fight.. ')
-            os.system('CLS')
+            option_input = input('\nPress "1" button to start fight.. \nPress "2" to try to escape\n>')
 
-            character1 = sorted_initiative[0][0]
-            character2 = sorted_initiative[1][0]
-            try:
-                if character1.type == 'monster':
-                    character2 = self.active_hero
-            except:
-                pass
-            if self.battle(character1, character2) > 0:
-                if self.battle(character2, character1) > 0:
-                    pass
-                else:
-                    print('\n' + character1.name + ' died\n')
+            if option_input == '1':
+                os.system('CLS')
+
+                character1 = sorted_initiative[0][0]
+                character2 = sorted_initiative[1][0]
+                try:
                     if character1.type == 'monster':
+                        character2 = self.active_hero
+                except:
+                    pass
+                if self.battle(character1, character2) > 0:
+                    if self.battle(character2, character1) > 0:
+                        pass
+                    else:
+                        print('\n' + character1.name + ' died\n')
+                        if character1.type == 'monster':
+                            map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                            map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
+                        else:
+                            self.died_function()
+                            break
+                        sorted_initiative.pop(0)
+                        if len(sorted_initiative) == 1:
+                            for treasure in active_treasures:
+                                user.wallet += treasure.value
+                            map_choice.show_map()
+                            break
+                else:
+                    print('\n' + character2.name + ' died\n')
+                    if character2.type == 'monster':
                         map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
                         map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
                     else:
                         self.died_function()
                         break
-                    sorted_initiative.pop(0)
+                    sorted_initiative.pop(1)
                     if len(sorted_initiative) == 1:
                         for treasure in active_treasures:
                             user.wallet += treasure.value
                         map_choice.show_map()
                         break
             else:
-                print('\n' + character2.name + ' died\n')
-                if character2.type == 'monster':
-                    map_choice.monster_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
-                    map_choice.treasure_map[map_choice.current_position[0]][map_choice.current_position[1]].clear()
-                else:
-                    self.died_function()
-                    break
-                sorted_initiative.pop(1)
-                if len(sorted_initiative) == 1:
-                    for treasure in active_treasures:
-                        user.wallet += treasure.value
+                if self.escape_fight():
+                    print("You escaped!")
+                    map_choice.escape_room(previous_position)
                     map_choice.show_map()
-                    break
+                    fight_loop = False
+                else:
+                    print("You failed to escape, now you need to survive")
+                    for character in sorted_initiative:
+                        if character[0].type == "monster":
+                            self.battle(character[0], self.active_hero)
 
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
@@ -206,9 +221,8 @@ class Menu:
 
         print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
         if len(monsters) > 0:
-            cmd = input('\nDo you wish to fight? y/n\n>').lower().strip()
-            if cmd == 'y':
-                self.fight(monsters, treasures)
+            self.fight(monsters,treasures)
+
         elif len(treasures) > 0:
             treasures = self.link_str_treasures(treasures)
             for treasure in treasures:
@@ -218,10 +232,11 @@ class Menu:
     def start_game(self):
         self.current_pos = ()
         global previous_position
+
         while True:
             print('wallet: ' + str(user.wallet))
             print('Use these commands to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
-            previous_position = self.current_pos
+            previous_position = deepcopy(map_choice.current_position)
             cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()

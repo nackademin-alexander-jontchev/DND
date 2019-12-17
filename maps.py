@@ -111,6 +111,7 @@ class Maps:
             self.current_map[len(self.current_map) - 1][0] = '@'
             self.current_position = (len(self.current_map) - 1, 0)
 
+
     def move_up(self):
         try:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
@@ -157,6 +158,7 @@ class Maps:
             return self.current_position
 
     def escape_room(self, previous_pos):
+        self.current_map[self.current_position[0]][self.current_position[1]] = 'X'
         self.current_position = previous_pos
         self.current_map[self.current_position[0]][self.current_position[1]] = '@'
         return self.current_position
