@@ -111,16 +111,15 @@ class Maps:
             self.current_map[len(self.current_map) - 1][0] = '@'
             self.current_position = (len(self.current_map) - 1, 0)
 
-
     def move_up(self):
-        try:
+        if self.current_position[0] - 1 < 0:
+            print("Cant go that way")
+            return self.current_position
+
+        else:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0] - 1][self.current_position[1]] = '@'
             self.current_position = (self.current_position[0] - 1, self.current_position[1])
-            return self.current_position
-        except:
-            print('Out of bounds')
-            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
 
     def move_down(self):
@@ -130,19 +129,19 @@ class Maps:
             self.current_position = (self.current_position[0] + 1, self.current_position[1])
             return self.current_position
         except:
-            print('Out of bounds')
+            print('Cant go that way')
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
 
     def move_left(self):
-        try:
+        if self.current_position[1] - 1 < 0:
+            print("Cant go that way")
+            return self.current_position
+
+        else:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
             self.current_map[self.current_position[0]][self.current_position[1] - 1] = '@'
             self.current_position = (self.current_position[0], self.current_position[1] - 1)
-            return self.current_position
-        except:
-            print('Out of bounds')
-            self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
 
     def move_right(self):
@@ -153,7 +152,7 @@ class Maps:
             self.current_position = (self.current_position[0], self.current_position[1] + 1)
             return self.current_position
         except:
-            print('Out of bounds')
+            print('Cant go that way')
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
             return self.current_position
 
