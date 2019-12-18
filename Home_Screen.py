@@ -127,12 +127,16 @@ class Menu:
         sum_agility = self.gen_agility_sum(sorted_initiative)
 
         if sum_attack[character1] > sum_agility[character2]:
+            if self.active_hero == character2 and count_shield == 1 and character2.name == "Knight":
+                print("Knights special blocked the attack\n")
+                return character2.durability
             print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
             if self.active_hero.name == "Thief" and thief_special_dice_roll <= 0.25:
                 print("Critical!")
                 character2.durability -= 2
             else:
                 character2.durability -= 1
+                
         else:
             print('\n' + character1.name + ' tried to attack but missed\n')
         return character2.durability
@@ -157,7 +161,10 @@ class Menu:
         global sorted_initiative
         sorted_initiative = self.sequence(active_monsters)
         fight_loop = True
-
+        
+        global count_shield
+        count_shield = 1
+        
         while fight_loop:
             for character in sorted_initiative:
                 try:
@@ -185,7 +192,12 @@ class Menu:
                 except:
                     pass
                 if self.battle(character1, character2) > 0:
+                    if character2.name == "Knight":
+                        count_shield +=1
+                        
                     if self.battle(character2, character1) > 0:
+                        if character1.name == "Knight":
+                            count_shield +=1
                         pass
                     else:
                         print('\n' + character1.name + ' died\n')
