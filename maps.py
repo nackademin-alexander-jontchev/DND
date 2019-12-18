@@ -97,7 +97,6 @@ class Maps:
             print(grid)
 
     def place_player(self, corner):
-
         if corner == 'ul':
             self.current_map[0][0] = '@'
             self.current_position = (0, 0)

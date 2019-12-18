@@ -10,7 +10,9 @@ import time
 import os.path
 from random import randint
 from copy import deepcopy
-
+from thiefAI import ThiefAI
+from wizardAI import WixardAI
+from knightAI import KnightAI
 
 class Menu:
 
@@ -29,6 +31,8 @@ class Menu:
         print("     Copyright 2019 Originals     ")
 
         self.active_hero = ''
+        self.AI = False
+        self.active_AI = ''
         self.menu_choice = input("\n>").strip()
         os.system("cls")
 
@@ -131,7 +135,7 @@ class Menu:
                 print("Knights special blocked the attack\n")
                 return character2.durability
             print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
-            if self.active_hero.name == "Thief" and thief_special_dice_roll <= 0.25:
+            if character1.name == "Thief" and thief_special_dice_roll <= 0.25:
                 print("Critical!")
                 character2.durability -= 2
             else:
@@ -179,10 +183,15 @@ class Menu:
                     count += 1
                 except:
                     pass
-            option_input = input('\nPress "1" button to start fight.. \nPress "2" to try to escape\n>')
+            option_input = ''
+            if self.AI:
+                time.sleep(4)
+                option_input = self.active_AI.fighting(active_monsters)
+            else:
+                option_input = input('\nPress "1" button to start fight.. \nPress "2" to try to escape\n>')
 
             if option_input == '1':
-                os.system('CLS')
+                #os.system('CLS')
 
                 character1 = sorted_initiative[0][0]
                 character2 = sorted_initiative[1][0]
@@ -244,6 +253,7 @@ class Menu:
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
+        self.active_AI.current_pos=(self.current_pos[0],self.current_pos[1])
 
         print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
         if len(monsters) > 0:
@@ -262,15 +272,24 @@ class Menu:
             print('wallet: ' + str(user.wallet))
             print('Use these commands to move:\nW = up\nS = down\nA = left\nD = right\nE = exit')
             previous_position = deepcopy(map_choice.current_position)
-            cmd = input('>').lower().strip()
+            cmd = ''
+            #ai input
+            if self.AI:
+                    cmd = self.active_AI.movement
+            else:        
+                cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 's':
                 self.current_pos = map_choice.move_down()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'a':
                 self.current_pos = map_choice.move_left()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'd':
                 self.current_pos = map_choice.move_right()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'e':
                 print("See you later!")
                 sys.exit()
@@ -312,23 +331,31 @@ class Menu:
             self.message = "You are a Knight!"
             knight_hero.ability_discription()
             self.active_hero = knight_hero
+            self.active_AI = KnightAI()
             print(self.message)
 
         elif self.user_char_choice == "2":
             self.message = "You are a Wizard!"
             wizard_hero.ability_discription()
             self.active_hero = wizard_hero
+            self.active_AI = WixardAI()
             print(self.message)
 
         elif self.user_char_choice == "3":
 
             self.message = "You are a Thief!"
-
+            thief_AI = ThiefAI()
             thief_hero.ability_discription()
             self.active_hero = thief_hero
+            self.active_AI = ThiefAI()
             print(self.message)
         global user
         user = User(self.charater_name, self.active_hero, 0, 0)
+
+    def pick_AI(self):
+        cmd = input('\n1:Do you want to play yourself\n2:Should an AI do it?\n')
+        if cmd == '2':
+            self.AI = True
 
     def pick_map(self):
         global map_choice
@@ -347,25 +374,35 @@ class Menu:
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz = 4
 
         elif self.user_map_choice == "2":
             map_choice.create_medium_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz =5
+
 
         elif self.user_map_choice == "3":
             map_choice.create_large_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz =8
 
-        pos = input('choose in which corner to begin :'
-                    '\n1: upper right '
-                    '\n2: lower right '
-                    '\n3: upper left'
-                    '\n4: lower left'
-                    '\n>')
+        
+        pos = ''
+        if self.AI:
+            pos = self.active_AI.corner
+            print('je')
+        else:
+            pos = input('choose in which corner to begin :'
+                        '\n1: upper right '
+                        '\n2: lower right '
+                        '\n3: upper left'
+                        '\n4: lower left'
+                        '\n>')
 
         os.system("cls")
 
@@ -378,7 +415,7 @@ class Menu:
             cmd = 'ul'
         elif pos == '4':
             cmd = 'll'
-
+        #ai input
         map_choice.place_player(cmd)
         map_choice.show_map()
         menu.start_game()
@@ -481,8 +518,8 @@ class Menu:
         if self.menu_choice == "1":
             menu.user_name_creation()
             menu.pick_character()
+            menu.pick_AI()
             menu.save_character()
-
             menu.pick_map()
 
         elif self.menu_choice == "2":
