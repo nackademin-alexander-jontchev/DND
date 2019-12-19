@@ -45,16 +45,16 @@ class Maps:
                 monster_list = []
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.2:
-                    monster_list.append('big spider')
+                    monster_list.append('Big spider')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.15:
-                    monster_list.append('skeleton')
+                    monster_list.append('Skeleton')
                 rnd3 = randint(1, 100) / 100
                 if rnd3 <= 0.1:
-                    monster_list.append('orc')
+                    monster_list.append('Orc')
                 rnd4 = randint(1, 100) / 100
                 if rnd4 <= 0.05:
-                    monster_list.append('troll')
+                    monster_list.append('Troll')
 
                 row[row.index(room)] = monster_list
 
@@ -70,19 +70,19 @@ class Maps:
 
                 rnd1 = randint(1, 100) / 100
                 if rnd1 <= 0.40:
-                    treassure_list.append('loose coins')
+                    treassure_list.append('Loose coins')
                 rnd2 = randint(1, 100) / 100
                 if rnd2 <= 0.20:
-                    treassure_list.append('money pouch')
+                    treassure_list.append('Money pouch')
                 rnd3 = randint(1, 100) / 100
                 if rnd3 <= 0.15:
-                    treassure_list.append('goldjewelry')
+                    treassure_list.append('Gold jewelry')
                 rnd4 = randint(1, 100) / 100
                 if rnd4 <= 0.10:
-                    treassure_list.append('gemstone')
+                    treassure_list.append('Gemstone')
                 rnd5 = randint(1, 100) / 100
                 if rnd5 <= 0.05:
-                    treassure_list.append('smallchest')
+                    treassure_list.append('Small chest')
 
                 row[row.index(room)] = treassure_list
         self.treasure_map = deepcopy(treasure_board.copy())
