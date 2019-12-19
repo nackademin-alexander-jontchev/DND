@@ -13,6 +13,7 @@ class Maps:
         self.monster_map = []
         self.treasure_map = []
         self.previous_position = []
+        self.exit_room = ()
 
     def create_small_map(self):
         self.small_map = [['X'] * 4 for i in range(4)]
@@ -115,6 +116,17 @@ class Maps:
         if self.current_position[0] - 1 < 0:
             print("Cant go that way")
             return self.current_position
+        elif self.current_position[0] - 1 == self.exit_room[0] and self.current_position[1] == self.exit_room[1]:
+            print("You've found the exit!\nDo you want to leave or continue?")
+            choice_input = input("y/n\n>")
+            if choice_input.lower() == "y":
+                return True
+            else:
+                self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                self.current_map[self.current_position[0] - 1][self.current_position[1]] = '@'
+                self.current_position = (self.current_position[0] - 1, self.current_position[1])
+                return self.current_position
+
 
         else:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
@@ -123,11 +135,24 @@ class Maps:
             return self.current_position
 
     def move_down(self):
+
         try:
-            self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
-            self.current_map[self.current_position[0] + 1][self.current_position[1]] = '@'
-            self.current_position = (self.current_position[0] + 1, self.current_position[1])
-            return self.current_position
+            if self.current_position[0] + 1 == self.exit_room[0] and self.current_position[1] == self.exit_room[1] :
+                print("You've found the exit!\nDo you want to leave or continue?")
+                choice_input = input("y/n\n>")
+                if choice_input.lower() == "y":
+                    return True
+                else:
+                    self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                    self.current_map[self.current_position[0] + 1][self.current_position[1]] = '@'
+                    self.current_position = (self.current_position[0] + 1, self.current_position[1])
+                    return self.current_position
+
+            else:
+                self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                self.current_map[self.current_position[0] + 1][self.current_position[1]] = '@'
+                self.current_position = (self.current_position[0] + 1, self.current_position[1])
+                return self.current_position
         except:
             print('Cant go that way')
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
@@ -137,6 +162,16 @@ class Maps:
         if self.current_position[1] - 1 < 0:
             print("Cant go that way")
             return self.current_position
+        elif self.current_position[1] - 1 == self.exit_room[1] and self.current_position[0] == self.exit_room[0]:
+            print("You've found the exit!\nDo you want to leave or continue?")
+            choice_input = input("y/n\n>")
+            if choice_input.lower() == "y":
+                return True
+            else:
+                self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                self.current_map[self.current_position[0]][self.current_position[1] - 1] = '@'
+                self.current_position = (self.current_position[0], self.current_position[1] - 1)
+                return self.current_position
 
         else:
             self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
@@ -147,10 +182,21 @@ class Maps:
     def move_right(self):
 
         try:
-            self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
-            self.current_map[self.current_position[0]][self.current_position[1] + 1] = '@'
-            self.current_position = (self.current_position[0], self.current_position[1] + 1)
-            return self.current_position
+            if self.current_position[1] + 1 == self.exit_room[1] and self.current_position[0] == self.exit_room[0]:
+                print("You've found the exit!\nDo you want to leave or continue?")
+                choice_input = input("y/n\n>")
+                if choice_input.lower() == "y":
+                    return True
+                else:
+                    self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                    self.current_map[self.current_position[0]][self.current_position[1] + 1] = '@'
+                    self.current_position = (self.current_position[0], self.current_position[1] + 1)
+                    return self.current_position
+            else:
+                self.current_map[self.current_position[0]][self.current_position[1]] = 'O'
+                self.current_map[self.current_position[0]][self.current_position[1] + 1] = '@'
+                self.current_position = (self.current_position[0], self.current_position[1] + 1)
+                return self.current_position
         except:
             print('Cant go that way')
             self.current_map[self.current_position[0]][self.current_position[1]] = '@'
@@ -161,3 +207,4 @@ class Maps:
         self.current_position = previous_pos
         self.current_map[self.current_position[0]][self.current_position[1]] = '@'
         return self.current_position
+

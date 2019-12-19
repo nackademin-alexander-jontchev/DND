@@ -41,7 +41,13 @@ class Menu:
         print("                                                                                      3-Remove saved Game     ")
         print("                                                                                      4-Exit                  ")
         print("\n")
-        print("                                                                                    Copyright 2019 Originals     ")
+        print("                                                                                    Copyright 2019 Originals      ")
+        print("\n")
+        print("                                                                                    Made by: Estefan Rengifo Marin")
+        print("                                                                                             Ludvig Carlsen       ")
+        print("                                                                                             Yassin Imlil         ")
+        print("                                                                                             Said Wattar          ")
+        print("                                                                                             Alexander Jontchev   ")
         print("\n")
 
 
@@ -156,10 +162,53 @@ class Menu:
                 with open(self.file_saved, "wb") as save_file:
                     binary_save = pickle.dumps(read_hero_list)
                     save_file.write(binary_save)
+                    sys.exit()
         else:
             print("See you next time!")
             sys.exit()
 
+    def win_function(self):
+        os.system("cls")
+        print("""
+                ██╗    ██╗███████╗    ██╗  ██╗ █████╗ ██╗   ██╗███████╗     █████╗     ██╗    ██╗██╗███╗   ██╗███╗   ██╗███████╗██████╗     ██████╗  ██████╗ ██╗███████╗██╗
+                ██║    ██║██╔════╝    ██║  ██║██╔══██╗██║   ██║██╔════╝    ██╔══██╗    ██║    ██║██║████╗  ██║████╗  ██║██╔════╝██╔══██╗    ██╔══██╗██╔═══██╗██║██╔════╝██║
+                ██║ █╗ ██║█████╗      ███████║███████║██║   ██║█████╗      ███████║    ██║ █╗ ██║██║██╔██╗ ██║██╔██╗ ██║█████╗  ██████╔╝    ██████╔╝██║   ██║██║███████╗██║
+                ██║███╗██║██╔══╝      ██╔══██║██╔══██║╚██╗ ██╔╝██╔══╝      ██╔══██║    ██║███╗██║██║██║╚██╗██║██║╚██╗██║██╔══╝  ██╔══██╗    ██╔══██╗██║   ██║██║╚════██║╚═╝
+                ╚███╔███╔╝███████╗    ██║  ██║██║  ██║ ╚████╔╝ ███████╗    ██║  ██║    ╚███╔███╔╝██║██║ ╚████║██║ ╚████║███████╗██║  ██║    ██████╔╝╚██████╔╝██║███████║██╗
+                 ╚══╝╚══╝ ╚══════╝    ╚═╝  ╚═╝╚═╝  ╚═╝  ╚═══╝  ╚══════╝    ╚═╝  ╚═╝     ╚══╝╚══╝ ╚═╝╚═╝  ╚═══╝╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝    ╚═════╝  ╚═════╝ ╚═╝╚══════╝╚═╝  
+         """)
+        if self.AI:
+            nr_rooms = 0
+            for row in map_choice.current_map:
+                for room in row:
+                    if room == 'O':
+                        nr_rooms += 1
+            print(
+                f'AI died:\nmonsters defeate: {self.active_AI.defeated_monsters}\nWallet: {self.user.wallet}\nrooms been in:{nr_rooms}')
+
+        replay = input(
+            "\n                                                            Do you want play again or exit the game ?"
+            "\n                                                            1-Play again"
+            "\n                                                            2-save game"
+            "\n                                                            3-Exit"
+            "\n                                                            >").strip()
+
+        if replay == "1":
+            menu.pick_character()
+            menu.pick_map()
+        elif replay == "2":
+            dict_wallet = {self.active_hero: self.user.wallet}
+
+            with open(self.file_saved, "rb") as file:
+                x = file.read()
+                read_hero_list = pickle.loads(x)
+                read_hero_list.append(dict_wallet)
+                with open(self.file_saved, "wb") as save_file:
+                    binary_save = pickle.dumps(read_hero_list)
+                    save_file.write(binary_save)
+        else:
+            print("See you next time!")
+            sys.exit()
     def gen_attack_sum(self, sorted_initiative):
         dict_attack_sum = {}
         for character in sorted_initiative:
@@ -346,12 +395,14 @@ class Menu:
     def start_game(self):
         self.current_pos = ()
         global previous_position
+        map_choice.exit_room = (randint(0, len(map_choice.current_map)-1), randint(0, len(map_choice.current_map)-1))
 
         while True:
             print('\nWallet: ' + str(self.user.wallet))
             print('\nUse these commands to move:\nW = up\nS = down\nA = left\nD = right\nSave = save\nE = exit')
             previous_position = deepcopy(map_choice.current_position)
             cmd = ''
+
             # ai input
             if self.AI:
                 cmd = self.active_AI.movement
@@ -359,15 +410,27 @@ class Menu:
                 cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
+                if type(self.current_pos) == type(True):
+                    self.win_function()
+                    break
                 self.active_AI.change_direction(self.current_pos)
             elif cmd == 's':
                 self.current_pos = map_choice.move_down()
+                if type(self.current_pos) == type(True):
+                    self.win_function()
+                    break
                 self.active_AI.change_direction(self.current_pos)
             elif cmd == 'a':
                 self.current_pos = map_choice.move_left()
+                if type(self.current_pos) == type(True):
+                    self.win_function()
+                    break
                 self.active_AI.change_direction(self.current_pos)
             elif cmd == 'd':
                 self.current_pos = map_choice.move_right()
+                if type(self.current_pos) == type(True):
+                    self.win_function()
+                    break
                 self.active_AI.change_direction(self.current_pos)
             elif cmd == 'save':
 
