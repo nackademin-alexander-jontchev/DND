@@ -6,13 +6,15 @@ from monsters import Monsters
 from treasure import Treasure
 from User import User
 
-import ast
 import pickle
 import sys
 import time
 import os.path
 from random import randint
 from copy import deepcopy
+from thiefAI import ThiefAI
+from wizardAI import WixardAI
+from knightAI import KnightAI
 
 
 class Menu:
@@ -20,21 +22,32 @@ class Menu:
     def __init__(self):
 
         os.system("cls")
-        print("##################################")
-        print('#    Welcome to "Dungeon Run     #')
-        print("##################################")
+        print(""" 
+         
+         
+                                                   ████████▄  ███    █▄  ███▄▄▄▄      ▄██████▄     ▄████████  ▄██████▄  ███▄▄▄▄           ▄████████ ███    █▄  ███▄▄▄▄        
+                                                   ███   ▀███ ███    ███ ███▀▀▀██▄   ███    ███   ███    ███ ███    ███ ███▀▀▀██▄        ███    ███ ███    ███ ███▀▀▀██▄      
+                                                   ███    ███ ███    ███ ███   ███   ███    █▀    ███    █▀  ███    ███ ███   ███        ███    ███ ███    ███ ███   ███      
+                                                   ███    ███ ███    ███ ███   ███  ▄███         ▄███▄▄▄     ███    ███ ███   ███       ▄███▄▄▄▄██▀ ███    ███ ███   ███      
+                                                   ███    ███ ███    ███ ███   ███ ▀▀███ ████▄  ▀▀███▀▀▀     ███    ███ ███   ███      ▀▀███▀▀▀▀▀   ███    ███ ███   ███      
+                                                   ███    ███ ███    ███ ███   ███   ███    ███   ███    █▄  ███    ███ ███   ███      ▀███████████ ███    ███ ███   ███      
+                                                   ███   ▄███ ███    ███ ███   ███   ███    ███   ███    ███ ███    ███ ███   ███        ███    ███ ███    ███ ███   ███      
+                                                   ████████▀  ████████▀   ▀█   █▀    ████████▀    ██████████  ▀██████▀   ▀█   █▀         ███    ███ ████████▀   ▀█   █▀       
+                                                                                                                      ███    ███                           
+                    """)
         print("\n")
-        print("          1-New Game              ")
-        print("          2-Load Game             ")
-        print("          3-Remove saved Game     ")
-        print("          4-Exit                  ")
+        print("                                                                                      1-New Game              ")
+        print("                                                                                      2-Load Game             ")
+        print("                                                                                      3-Remove saved Game     ")
+        print("                                                                                      4-Exit                  ")
         print("\n")
-        print("     Copyright 2019 Originals     ")
+        print("                                                                                    Copyright 2019 Originals     ")
+        print("\n")
+
 
         self.active_hero = ''
-
-        #self.menu_choice = input("\n>").strip()
-        #os.system("cls")
+        self.AI = False
+        self.active_AI = ''
 
     def sort_fight_order(self, fight_order_list):
         n = len(fight_order_list)
@@ -97,18 +110,52 @@ class Menu:
 
     def died_function(self):
         os.system("cls")
-        print("You have been defeated!")
-        print('\nYour score is: ' + str(self.user.wallet), "points.")
-        replay = input("\nDo you want play again or exit the game ?\n1-Play again\n2-Save the sore\n3-Exit\n>").strip()
+        print("""
+        
+        
+                ▓██   ██▓ ▒█████   █    ██     ▄▄▄       ██▀███  ▓█████     ███▄    █  ▒█████  ▄▄▄█████▓    █     █░ ▒█████   ██▀███  ▄▄▄█████▓ ██░ ██▓██   ██▓
+                 ▒██  ██▒▒██▒  ██▒ ██  ▓██▒   ▒████▄    ▓██ ▒ ██▒▓█   ▀     ██ ▀█   █ ▒██▒  ██▒▓  ██▒ ▓▒   ▓█░ █ ░█░▒██▒  ██▒▓██ ▒ ██▒▓  ██▒ ▓▒▓██░ ██▒▒██  ██▒
+                  ▒██ ██░▒██░  ██▒▓██  ▒██░   ▒██  ▀█▄  ▓██ ░▄█ ▒▒███      ▓██  ▀█ ██▒▒██░  ██▒▒ ▓██░ ▒░   ▒█░ █ ░█ ▒██░  ██▒▓██ ░▄█ ▒▒ ▓██░ ▒░▒██▀▀██░ ▒██ ██░
+                  ░ ▐██▓░▒██   ██░▓▓█  ░██░   ░██▄▄▄▄██ ▒██▀▀█▄  ▒▓█  ▄    ▓██▒  ▐▌██▒▒██   ██░░ ▓██▓ ░    ░█░ █ ░█ ▒██   ██░▒██▀▀█▄  ░ ▓██▓ ░ ░▓█ ░██  ░ ▐██▓░
+                  ░ ██▒▓░░ ████▓▒░▒▒█████▓     ▓█   ▓██▒░██▓ ▒██▒░▒████▒   ▒██░   ▓██░░ ████▓▒░  ▒██▒ ░    ░░██▒██▓ ░ ████▓▒░░██▓ ▒██▒  ▒██▒ ░ ░▓█▒░██▓ ░ ██▒▓░
+                   ██▒▒▒ ░ ▒░▒░▒░ ░▒▓▒ ▒ ▒     ▒▒   ▓▒█░░ ▒▓ ░▒▓░░░ ▒░ ░   ░ ▒░   ▒ ▒ ░ ▒░▒░▒░   ▒ ░░      ░ ▓░▒ ▒  ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░  ▒ ░░    ▒ ░░▒░▒  ██▒▒▒ 
+                 ▓██ ░▒░   ░ ▒ ▒░ ░░▒░ ░ ░      ▒   ▒▒ ░  ░▒ ░ ▒░ ░ ░  ░   ░ ░░   ░ ▒░  ░ ▒ ▒░     ░         ▒ ░ ░    ░ ▒ ▒░   ░▒ ░ ▒░    ░     ▒ ░▒░ ░▓██ ░▒░ 
+                 ▒ ▒ ░░  ░ ░ ░ ▒   ░░░ ░ ░      ░   ▒     ░░   ░    ░         ░   ░ ░ ░ ░ ░ ▒    ░           ░   ░  ░ ░ ░ ▒    ░░   ░   ░       ░  ░░ ░▒ ▒ ░░  
+                 ░ ░         ░ ░     ░              ░  ░   ░        ░  ░            ░     ░ ░                  ░        ░ ░     ░               ░  ░  ░░ ░     
+                 ░ ░                                                                                                                                   ░ ░     
+        
+        
+        
+        
+        
+        """)
+        if self.AI:
+            nr_rooms = 0
+            for row in map_choice.current_map:
+                for room in row:
+                    if room == 'O':
+                        nr_rooms += 1
+            print(f'AI died:\nmonsters defeate: {self.active_AI.defeated_monsters}\nWallet: {self.user.wallet}\nrooms been in:{nr_rooms}')
+
+        replay = input("\n                                                            Do you want play again or exit the game ?"
+                       "\n                                                            1-Play again"
+                       "\n                                                            2-save game"
+                       "\n                                                            3-Exit"
+                       "\n                                                            >").strip()
+
         if replay == "1":
             menu.pick_character()
             menu.pick_map()
-
         elif replay == "2":
-            with open(self.file_saved, "a+") as file:
-                file.write(self.message + " and your score is: " + str(self.user.wallet) + " points." + "\n")
-                sys.exit()
+            dict_wallet = {self.active_hero: self.user.wallet}
 
+            with open(self.file_saved, "rb") as file:
+                x = file.read()
+                read_hero_list = pickle.loads(x)
+                read_hero_list.append(dict_wallet)
+                with open(self.file_saved, "wb") as save_file:
+                    binary_save = pickle.dumps(read_hero_list)
+                    save_file.write(binary_save)
         else:
             print("See you next time!")
             sys.exit()
@@ -139,14 +186,18 @@ class Menu:
         sum_agility = self.gen_agility_sum(sorted_initiative)
 
         if sum_attack[character1] > sum_agility[character2]:
-            print('\n' + character1.name + f' attacks {character2.name} and deals 1 damage')
-            if self.active_hero.name == "Thief" and thief_special_dice_roll <= 0.25:
-                print("Critical Hit!")
+            if self.active_hero == character2 and count_shield == 1 and character2.name == "Knight":
+                print("Knights special blocked the attack\n")
+                return character2.durability
+            print(character1.name + f' attacks {character2.name} and deals 1 damage')
+            if character1.name == "Thief" and thief_special_dice_roll <= 0.25:
+                print("Critical!")
                 character2.durability -= 2
             else:
                 character2.durability -= 1
+
         else:
-            print('\n' + character1.name + ' tried to attack but missed')
+            print(character1.name + ' tried to attack but missed\n')
         return character2.durability
 
     def escape_fight(self):
@@ -170,10 +221,13 @@ class Menu:
         sorted_initiative = self.sequence(active_monsters)
         fight_loop = True
 
+        global count_shield
+        count_shield = 1
+
         while fight_loop:
             for character in sorted_initiative:
                 try:
-                    print("\n", character[0].name + f"'s health:  {character[0].durability}")
+                    print(character[0].name + f's health:  {character[0].durability}')
                 except:
                     pass
             print('\nThe turn order is: ')
@@ -184,10 +238,17 @@ class Menu:
                     count += 1
                 except:
                     pass
-            option_input = input('\nPress "1" button to start fight.. \nPress "2" to try to escape\n>')
+            option_input = ''
+            if self.AI:
+                time.sleep(4)
+                option_input = self.active_AI.fighting(active_monsters)
+            else:
+                option_input = input('\nPress "1" to start fight ... \nPress "2" to try to escape ...\n>')
 
             if option_input == '1':
-                os.system('CLS')
+                os.system('cls')
+
+                print("Fight ...")
 
                 character1 = sorted_initiative[0][0]
                 character2 = sorted_initiative[1][0]
@@ -197,7 +258,12 @@ class Menu:
                 except:
                     pass
                 if self.battle(character1, character2) > 0:
+                    if character2.name == "Knight":
+                        count_shield += 1
+
                     if self.battle(character2, character1) > 0:
+                        if character1.name == "Knight":
+                            count_shield += 1
                         pass
                     else:
                         print('\n' + character1.name + ' died\n')
@@ -206,10 +272,12 @@ class Menu:
                                 map_choice.current_position[1]].clear()
                             map_choice.treasure_map[map_choice.current_position[0]][
                                 map_choice.current_position[1]].clear()
+
                         else:
                             self.died_function()
                             break
                         sorted_initiative.pop(0)
+                        self.active_AI.defeated_monsters += 1
                         if len(sorted_initiative) == 1:
                             for treasure in active_treasures:
                                 self.user.wallet += treasure.value
@@ -224,6 +292,7 @@ class Menu:
                         self.died_function()
                         break
                     sorted_initiative.pop(1)
+                    self.active_AI.defeated_monsters += 1
                     if len(sorted_initiative) == 1:
                         for treasure in active_treasures:
                             self.user.wallet += treasure.value
@@ -231,11 +300,13 @@ class Menu:
                         break
             else:
                 if self.escape_fight():
+                    os.system("cls")
                     print("You escaped!")
                     map_choice.escape_room(previous_position)
                     map_choice.show_map()
                     fight_loop = False
                 else:
+                    os.system("cls")
                     print("You failed to escape, now you need to survive")
                     for character in sorted_initiative:
                         if character[0].type == "monster":
@@ -244,25 +315,25 @@ class Menu:
     def new_room_options(self):
         monsters = map_choice.monster_map[self.current_pos[0]][self.current_pos[1]]
         treasures = map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]]
+        self.active_AI.current_pos = (self.current_pos[0], self.current_pos[1])
 
         print("\nTreasures in this room:")
 
         for t in treasures:
-            print(t,end=" | ")
+            print(t, end=" | ")
         print()
+
+        print("--------------------------------------------")
 
         print("\nMonsters in this room:")
 
         for m in monsters:
-            print(m,end=" | ")
+            print(m, end=" | ")
         print()
 
-        print("----------------------------------------------------------------------")
+        print("--------------------------------------------\n")
 
-
-
-        #print(f'\nMonsters in this room:   {monsters}\nTreasures in this rooms: {treasures}')
-
+        #print(f'\nMonsters in this room:   {monsters} \nTreasures in this rooms: {treasures}')
         if len(monsters) > 0:
             self.fight(monsters, treasures)
 
@@ -270,31 +341,39 @@ class Menu:
             treasures = self.link_str_treasures(treasures)
             for treasure in treasures:
                 self.user.wallet += treasure.value
+            map_choice.treasure_map[self.current_pos[0]][self.current_pos[1]].clear()
 
     def start_game(self):
         self.current_pos = ()
         global previous_position
 
         while True:
-            print('\nWallet: ', str(self.user.wallet))
-            #print(self.active_hero.name)
-            print('Use these commands to move:\nW = up\nS = down\nA = left\nD = right\nSave = save\nE = exit')
+            print('\nWallet: ' + str(self.user.wallet))
+            print('\nUse these commands to move:\nW = up\nS = down\nA = left\nD = right\nSave = save\nE = exit')
             previous_position = deepcopy(map_choice.current_position)
-            cmd = input('>').lower().strip()
+            cmd = ''
+            # ai input
+            if self.AI:
+                cmd = self.active_AI.movement
+            else:
+                cmd = input('>').lower().strip()
             if cmd == 'w':
                 self.current_pos = map_choice.move_up()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 's':
                 self.current_pos = map_choice.move_down()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'a':
                 self.current_pos = map_choice.move_left()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'd':
                 self.current_pos = map_choice.move_right()
+                self.active_AI.change_direction(self.current_pos)
             elif cmd == 'save':
 
                 self.file_saved = (self.charater_name + ".txt")
 
-                dict_wallet = {self.active_hero : self.user.wallet}
-
+                dict_wallet = {self.active_hero: self.user.wallet}
 
                 with open(self.file_saved, "rb") as file:
                     x = file.read()
@@ -303,15 +382,11 @@ class Menu:
                     with open(self.file_saved, "wb") as save_file:
                         binary_save = pickle.dumps(read_hero_list)
                         save_file.write(binary_save)
-
-                    # pickle.dump(dict_wallet,file)
-
-                #with open(self.file_saved, "a+") as file:
-                   #file.write(self.message + " and your score is: " + str(user.wallet) + " points." + "\n")
-                    #file.writelines(dict_wallet)
+                print("Your game has been saved!")
+                time.sleep(2)
 
             elif cmd == 'e':
-                print('\nYour score is: ' + str(self.user.wallet), "points.")
+                print('\nYour score is: ' + str(self.user.wallet), " points.")
                 print("See you later!")
                 sys.exit()
 
@@ -349,63 +424,88 @@ class Menu:
         os.system("cls")
 
         if self.user_char_choice == "1":
-            self.message = "You are a Knight"
+            self.message = "You are a Knight!"
             knight_hero.ability_discription()
             self.active_hero = knight_hero
+            self.active_AI = KnightAI()
             print(self.message)
 
         elif self.user_char_choice == "2":
-            self.message = "You are a Wizard"
+            self.message = "You are a Wizard!"
             wizard_hero.ability_discription()
             self.active_hero = wizard_hero
+            self.active_AI = WixardAI()
             print(self.message)
 
         elif self.user_char_choice == "3":
 
-            self.message = "You are a Thief"
-
+            self.message = "You are a Thief!"
+            thief_AI = ThiefAI()
             thief_hero.ability_discription()
             self.active_hero = thief_hero
+            self.active_AI = ThiefAI()
             print(self.message)
         global user
         self.user = User(self.charater_name, self.active_hero, 0, 0)
 
+    def pick_AI(self):
+        cmd = input('\n1:Do you want to play yourself\n2:Should an AI do it?\n>')
+        if cmd == '2':
+            self.AI = True
+
+
     def pick_map(self):
+        os.system("cls")
         global map_choice
 
         map_choice = Maps()
 
-        print("\nPlease, choose your map size!")
         print("\nChoose your map size!")
         print("\n1- Small map 4x4\n2- Medium map 5x5\n3- Large map 8x8\n")
 
         self.user_map_choice = input("\n>").strip()
         os.system("cls")
 
+        if self.active_hero.name == 'Knight':
+            self.active_AI = KnightAI()
+        elif self.active_hero.name == 'Thief':
+            self.active_AI = ThiefAI()
+        elif self.active_hero.name == 'Wizard':
+            self.active_AI = WixardAI()
+
         if self.user_map_choice == "1":
             map_choice.create_small_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz = 4
 
         elif self.user_map_choice == "2":
             map_choice.create_medium_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz = 5
+
 
         elif self.user_map_choice == "3":
             map_choice.create_large_map()
             map_choice.show_map()
             map_choice.randomize_monster()
             map_choice.randomize_treasure()
+            self.active_AI.mapsz = 8
 
-        pos = input('choose in which corner to begin :'
-                    '\n1: upper right '
-                    '\n2: lower right '
-                    '\n3: upper left'
-                    '\n4: lower left'
-                    '\n>')
+        pos = ''
+        if self.AI:
+            pos = self.active_AI.corner
+            print('je')
+        else:
+            pos = input('\nChoose in which corner to begin :\n'
+                        '\n1: upper right '
+                        '\n2: lower right '
+                        '\n3: upper left'
+                        '\n4: lower left'
+                        '\n>')
 
         os.system("cls")
 
@@ -418,14 +518,14 @@ class Menu:
             cmd = 'ul'
         elif pos == '4':
             cmd = 'll'
-
+        # ai input
         map_choice.place_player(cmd)
         map_choice.show_map()
         menu.start_game()
 
     def user_name_creation(self):
 
-        question = "Hello and welcome to 'Dungeon Run'.\nchoose a username for your character and let's get started!"
+        question = "Hello and welcome to 'Dungeon Run'.\nChoose a username for your character and let's get started!"
 
         for char in question:
             sys.stdout.write(char)
@@ -458,9 +558,10 @@ class Menu:
         self.file_saved = (self.charater_name + ".txt")
         if os.path.exists(self.file_saved):
             with open(self.file_saved, "rb") as file:
-                self.hero_list = pickle.loads(file)
+                b_file = file.read()
+                self.hero_list = pickle.loads(b_file)
         else:
-            with open(self.file_saved, "wb") as new_file:
+            with open(self.file_saved, "wb+") as new_file:
 
                 empty_hero_list = []
                 initial_save = pickle.dumps(empty_hero_list)
@@ -482,9 +583,8 @@ class Menu:
                 pass
                 #file.write(self.message + "\n")
 
+
     def load_game(self):
-
-
 
         self.show_saved_game = input("\nDo you want to show all the saved game ? y/n\n>").strip().lower()
         if self.show_saved_game == "y":
@@ -494,18 +594,11 @@ class Menu:
 
         self.charater_name = input("\nPlease Enter your character username :\n>").strip().capitalize()
         self.load_username = (self.charater_name + ".txt")
+        print("\n")
 
         if os.path.exists(self.load_username):
 
-            #with open(self.load_username, "r") as file:
-                #files = file.read()
-
-                #print("Loading Game ...")
-
-                # time.sleep(2)
-
-                #print(files)
-
+            count = 0
 
             with open (self.load_username, "rb") as file:
                 binary_load = file.read()
@@ -514,16 +607,24 @@ class Menu:
                 for element in files:
                     for self.k, self.v in element.items():
 
-                        print(self.k.name, self.v)
+                        count += 1
+                        print(count, self.k.name, self.v)
+
+            my_input = input("\nPick a saved file\n>")
+            for k, v in files[int(my_input) - 1].items():
+
+                self.user = User(self.charater_name, k, v, 0)
+                print(f'\nYou have picked {k.name,v}')
 
 
-
-            self.user = User(self.charater_name, self.k, self.v, 0)
             self.active_hero = self.k
+            menu.pick_AI()
             menu.pick_map()
 
         else:
             print("This game doesn't exist.")
+
+
 
     def delete_file(self):
 
@@ -555,7 +656,7 @@ class Menu:
             menu.user_name_creation()
             menu.pick_character()
             menu.save_character()
-
+            menu.pick_AI()
             menu.pick_map()
 
         elif self.menu_choice == "2":
@@ -581,5 +682,3 @@ while 1:
     # Instance of the class Menu
     menu = Menu()
     menu.new_user_game()
-
-
