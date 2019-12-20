@@ -36,18 +36,18 @@ class Menu:
                                                                                                                       ███    ███                           
                     """)
         print("\n")
-        print("                                                                                      1-New Game              ")
-        print("                                                                                      2-Load Game             ")
-        print("                                                                                      3-Remove saved Game     ")
-        print("                                                                                      4-Exit                  ")
+        print("                                                                                              1-New Game              ")
+        print("                                                                                              2-Load Game             ")
+        print("                                                                                              3-Remove saved Game     ")
+        print("                                                                                              4-Exit                  ")
         print("\n")
-        print("                                                                                    Copyright 2019 Originals      ")
+        print("                                                                                     Copyright 2019 Originals      ")
         print("\n")
-        print("                                                                                    Made by: Estefan Rengifo Marin")
-        print("                                                                                             Ludvig Carlsen       ")
-        print("                                                                                             Yassin Imlil         ")
-        print("                                                                                             Said Wattar          ")
-        print("                                                                                             Alexander Jontchev   ")
+        print("                                                                                     Made by: Estefan Rengifo Marin")
+        print("                                                                                              Ludvig Carlsen       ")
+        print("                                                                                              Yassin Imlil         ")
+        print("                                                                                              Said Wattar          ")
+        print("                                                                                              Alexander Jontchev   ")
         print("\n")
 
 
@@ -467,17 +467,17 @@ class Menu:
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            # time.sleep(0.05)
+            time.sleep(0.05)
         # Here you can put the class heroes
 
         knight_hero = Knight()
         knight_hero.ability_discription()
 
-        # time.sleep(0.05)
+        time.sleep(0.05)
         wizard_hero = Wizard()
         wizard_hero.ability_discription()
 
-        # time.sleep(0.05)
+        time.sleep(0.05)
         thief_hero = Thief()
         thief_hero.ability_discription()
 
@@ -593,7 +593,7 @@ class Menu:
         for char in question:
             sys.stdout.write(char)
             sys.stdout.flush()
-            # time.sleep(0.05)
+            time.sleep(0.05)
 
         self.charater_name = input("\n>").strip().capitalize()
 
@@ -602,18 +602,18 @@ class Menu:
         for char in question2:
             sys.stdout.write(char)
             sys.stdout.flush()
-            # time.sleep(0.05)
+            time.sleep(0.05)
 
-        # time.sleep(1)
+        time.sleep(1)
 
         question3 = f'Your character name {self.charater_name} has been created!'
 
         for char in question3:
             sys.stdout.write(char)
             sys.stdout.flush()
-            # time.sleep(0.05)
+            time.sleep(0.05)
 
-        # time.sleep(2)
+        time.sleep(2)
 
         os.system("cls")
 
@@ -703,7 +703,7 @@ class Menu:
 
             os.remove(self.remove_file)
             print("Removing saved game ...")
-            # time.sleep(2)
+            time.sleep(2)
             print("Game removed!")
 
         except:
